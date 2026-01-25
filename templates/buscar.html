@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Apoio - Vizinhança Cuidadora</title>
+    <style>
+        /* Estilização focada em Inclusão Digital e Simplicidade */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #f4f7f6; 
+            padding: 20px; 
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        .container { 
+            max-width: 600px; 
+            margin: auto; 
+        }
+
+        h1 { text-align: center; color: #27ae60; }
+        .subtitle { text-align: center; color: #7f8c8d; margin-bottom: 30px; }
+
+        .search-form { 
+            margin-bottom: 30px; 
+            display: flex; 
+            gap: 10px; 
+        }
+
+        input { 
+            flex: 1; 
+            padding: 15px; 
+            border: 2px solid #ddd; 
+            border-radius: 10px; 
+            font-size: 16px;
+        }
+
+        input:focus { border-color: #27ae60; outline: none; }
+
+        button { 
+            padding: 15px 25px; 
+            background: #27ae60; 
+            color: white; 
+            border: none; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            transition: background 0.3s;
+        }
+
+        button:hover { background: #219150; }
+
+        .card { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08); 
+            margin-bottom: 20px; 
+            border-top: 5px solid #27ae60;
+            transition: transform 0.2s;
+        }
+
+        .card:hover { transform: translateY(-3px); }
+
+        .verificado { 
+            color: #27ae60; 
+            font-size: 12px; 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .card h3 { margin: 0 0 10px 0; font-size: 22px; }
+        .card p { margin: 5px 0; color: #34495e; }
+
+        .btn-atendimento { 
+            display: block; 
+            text-align: center;
+            margin-top: 20px; 
+            padding: 12px; 
+            background: #27ae60; 
+            color: white; 
+            border-radius: 8px; 
+            text-decoration: none; 
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn-atendimento:hover { background: #1e8449; }
+
+        .empty-state { text-align: center; color: #95a5a6; padding: 40px 0; }
+        
+        .back-link { 
+            display: block; 
+            text-align: center; 
+            margin-top: 20px; 
+            color: #7f8c8d; 
+            text-decoration: none; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Vizinhança Cuidadora</h1>
+        <p class="subtitle">Conectando cuidado e confiança no seu setor.</p>
+
+        <form class="search-form" action="/buscar" method="GET">
+            <input type="text" name="q" placeholder="Buscar por nome, setor ou serviço..." value="{{ busca }}">
+            <button type="submit">Pesquisar</button>
+        </form>
+
+        {% for p in profissionais %}
+        <div class="card">
+            <span class="verificado">✓ Validado pela Associação</span>
+            <h3>{{ p[0] }}</h3>
+            <p><strong>Especialidade:</strong> {{ p[1] }}</p>
+            <p><strong>Setor:</strong> {{ p[2] }}</p>
+            
+            <a href="/pagamento/{{ p[0] }}" class="btn-atendimento">Solicitar Atendimento</a>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <p>Nenhum profissional verificado encontrado para "{{ busca }}".</p>
+        </div>
+        {% endfor %}
+        
+        <a href="/" class="back-link">← Voltar ao Cadastro Principal</a>
+    </div>
+</body>
+</html>

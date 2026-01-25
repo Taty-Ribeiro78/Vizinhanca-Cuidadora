@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Vizinhança Cuidadora</title>
+    <style>
+        /* Estilização moderna e focada em Inclusão Digital */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .card-cadastro {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h2 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .instrucao {
+            font-size: 0.95em;
+            color: #7f8c8d;
+            margin-bottom: 25px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: #27ae60;
+            outline: none;
+        }
+
+        input[type="file"] {
+            border: 2px dashed #dcdde1;
+            background: #f8f9fa;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #219150;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .footer-links {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .footer-links a {
+            color: #2980b9;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card-cadastro">
+    <h2>Vizinhança Cuidadora</h2>
+    <p class="instrucao">Faça parte da rede de saúde da sua comunidade. Seus dados serão validados pela Associação de Moradores.</p>
+    
+    <form action="/enviar_cadastro" method="POST" enctype="multipart/form-data">
+        <label for="nome">Nome Completo</label>
+        <input type="text" id="nome" name="nome" placeholder="Ex: Maria Oliveira" required>
+
+        <label for="especialidade">Especialidade</label>
+        <input type="text" id="especialidade" name="especialidade" placeholder="Ex: Cuidador de Idosos, Técnico(a)" required>
+
+        <label for="localidade">Sua Localidade (Setor)</label>
+        <input type="text" id="localidade" name="localidade" placeholder="Ex: Setor A - Morro do Alto" required>
+
+        <label for="certificado">Certificado Profissional (PDF ou Foto)</label>
+        <input type="file" id="certificado" name="certificado" accept="image/*,.pdf" required>
+
+        <button type="submit">Cadastrar para Validação</button>
+    </form>
+</div>
+
+<div class="footer-links">
+    <a href="/buscar">Já é cadastrado? Procure um profissional aqui</a>
+</div>
+
+</body>
+</html>
