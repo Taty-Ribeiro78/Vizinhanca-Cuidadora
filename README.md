@@ -22,8 +22,8 @@ O motor de busca foi otimizado para a realidade das comunidades:
 O código fonte traduz o plano de negócios diretamente na interface do usuário através de um simulador de repasse automático:
 
 * **Repasse Direto (80%)**: Focado na autonomia financeira do profissional local.
-* **Taxa de Sustentabilidade (15%)**: Destinada à manutenção tecnológica da startup.
-* **Fundo Comunitário (5%)**: Reinvestimento direto na Associação de Moradores para melhorias na infraestrutura física do bairro.
+* **Taxa de Sustentabilidade (5%)**: Destinada à manutenção tecnológica da startup.
+* **Fundo Comunitário (15%)**: Reinvestimento direto na Associação de Moradores para melhorias na infraestrutura física do bairro.
 
 ### 4. Arquitetura "Mobile-First" e Acessível
 O frontend foi desenvolvido com foco em inclusão:
@@ -62,7 +62,7 @@ O frontend foi desenvolvido com foco em inclusão:
 O projeto **Vizinhança Cuidadora** foi desenhado para crescer. Abaixo estão as funcionalidades planejadas para as próximas versões:
 
 ### Fase 1: Segurança e Pagamento (Curto Prazo)
-* **Integração com PIX API**: Automação total da divisão de valores (**80/15/5**) no momento do pagamento, eliminando processos manuais.
+* **Integração com PIX API**: Automação total da divisão de valores (**80/5/15**) no momento do pagamento, eliminando processos manuais.
 * **Sistema de Avaliações (Rating)**: Implementação de sistema de "estrelas" e comentários para que moradores avaliem o atendimento, aumentando a confiança na rede.
 * **Chat Interno**: Canal de comunicação direto e seguro entre morador e profissional dentro da plataforma para agendamento de visitas.
 

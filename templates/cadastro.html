@@ -81,15 +81,12 @@
             font-weight: bold;
             cursor: pointer;
             transition: background 0.3s, transform 0.2s;
+            margin-top: 10px;
         }
 
         button:hover {
             background-color: #219150;
             transform: translateY(-2px);
-        }
-
-        button:active {
-            transform: translateY(0);
         }
 
         .footer-links {
@@ -115,10 +112,13 @@
         <input type="text" id="nome" name="nome" placeholder="Ex: Maria Oliveira" required>
 
         <label for="especialidade">Especialidade</label>
-        <input type="text" id="especialidade" name="especialidade" placeholder="Ex: Cuidador de Idosos, Técnico(a)" required>
+        <input type="text" id="especialidade" name="especialidade" placeholder="Ex: Cuidador de Idosos" required>
 
         <label for="localidade">Sua Localidade (Setor)</label>
         <input type="text" id="localidade" name="localidade" placeholder="Ex: Setor A - Morro do Alto" required>
+
+        <label for="valor_servico">Valor do seu Trabalho (R$)</label>
+        <input type="number" id="valor_servico" name="valor_servico" step="0.01" placeholder="Ex: 150.00" required>
 
         <label for="certificado">Certificado Profissional (PDF ou Foto)</label>
         <input type="file" id="certificado" name="certificado" accept="image/*,.pdf" required>
