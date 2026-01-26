@@ -1,10 +1,15 @@
-# Ignorar o banco de dados local (ele será criado pelo script no PC do avaliador)
+# Banco de Dados Local (Dados Sensíveis e Chaves)
 vizinhanca.db
 
-# Ignorar os certificados enviados (privacidade dos dados)
-certificados/*
+# Pastas de Upload (Certificados e PDFs)
+certificados/
 
-# Ignorar pastas de ambiente virtual do Python
-venv/
+# Python (Arquivos temporários e compilados)
 __pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Configurações do VS Code
 .vscode/
