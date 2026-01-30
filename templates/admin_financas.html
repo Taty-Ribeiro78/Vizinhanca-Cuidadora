@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Financeiro | Vizinhança Cuidadora</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: "#087f8c", accent: "#ef711b", dark: "#0f172a" },
+                    fontFamily: { sans: ["Outfit", "sans-serif"] }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex">
+
+    <aside class="w-72 bg-dark text-white flex flex-col fixed h-full z-10 shadow-2xl">
+        <div class="p-8 flex items-center gap-3">
+            <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center overflow-hidden border border-primary/20">
+                <img src="{{ url_for('static', filename='img.jpg') }}" alt="Logo" class="w-full h-full object-cover">
+            </div>
+            <h1 class="font-bold text-sm uppercase tracking-wider text-primary">VC Admin</h1>
+        </div>
+        
+        <nav class="flex-1 px-4 space-y-2">
+            <a href="{{ url_for('admin_geral') }}" class="flex items-center gap-3 px-4 py-4 text-slate-400 hover:bg-slate-800 rounded-xl transition-all">
+                <span class="material-symbols-outlined">dashboard</span> Painel Geral
+            </a>
+            <div class="bg-primary/10 text-primary flex items-center gap-3 px-4 py-4 rounded-xl font-bold border-l-4 border-primary shadow-inner">
+                <span class="material-symbols-outlined">account_balance_wallet</span> Financeiro
+            </div>
+        </nav>
+    </aside>
+
+    <main class="ml-72 flex-1 p-12">
+        <header class="mb-10 flex justify-between items-end">
+            <div>
+                <h2 class="text-4xl font-black text-slate-800 tracking-tight">Gestão do Fundo (15%)</h2>
+                <p class="text-slate-500 mt-1">Transparência via Stellar Blockchain</p>
+            </div>
+            <div class="bg-white px-6 py-3 rounded-2xl shadow-sm border border-slate-200">
+                <p class="text-green-600 font-bold flex items-center gap-2 text-sm">
+                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Mainnet Ativa
+                </p>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+            <div class="bg-white p-8 rounded-[2rem] border border-slate-200 shadow-sm transition-transform hover:scale-[1.02]">
+                <p class="text-slate-400 font-bold text-xs uppercase mb-2 tracking-widest">Saldo no Fundo</p>
+                <h3 class="text-4xl font-black text-primary">R$ {{ "%.2f"|format(total_fundo|default(0)|float) }}</h3>
+            </div>
+            
+            <div class="bg-white p-8 rounded-[2rem] border border-slate-200 shadow-sm transition-transform hover:scale-[1.02]">
+                <p class="text-slate-400 font-bold text-xs uppercase mb-2 tracking-widest">Cuidadores Ativos</p>
+                <h3 class="text-4xl font-black text-slate-800">{{ total_pros|default(0) }}</h3>
+            </div>
+
+            <div class="bg-accent p-8 rounded-[2rem] text-white shadow-xl shadow-orange-100 transition-transform hover:scale-[1.02]">
+                <p class="text-orange-200 font-bold text-xs uppercase mb-2 tracking-widest">Taxa Social</p>
+                <h3 class="text-4xl font-black">15%</h3>
+                <p class="text-xs text-orange-100/70 mt-2 font-medium">Reinvestido na comunidade local</p>
+            </div>
+        </div>
+
+        <div class="bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-sm mb-10">
+            <div class="flex justify-between items-center mb-8">
+                <h4 class="font-bold text-xl text-slate-800">Evolução do Saldo Acumulado</h4>
+                <span class="material-symbols-outlined text-slate-300">trending_up</span>
+            </div>
+            <div class="h-64">
+                <canvas id="growthChart"></canvas>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-[2.5rem] border border-slate-200 shadow-sm overflow-hidden">
+            <div class="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/30">
+                <h3 class="font-bold text-xl">Histórico de Transações</h3>
+                <button class="text-primary text-sm font-bold hover:underline flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm">open_in_new</span> Ver no Explorer
+                </button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-50 text-slate-400 uppercase text-[10px] font-black tracking-widest">
+                        <tr>
+                            <th class="px-8 py-4">Data/Hora</th>
+                            <th class="px-8 py-4">Tipo</th>
+                            <th class="px-8 py-4">Valor</th>
+                            <th class="px-8 py-4">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        {% if transacoes %}
+                            {% for trans in transacoes %}
+                            <tr class="hover:bg-slate-50 transition-colors">
+                                <td class="px-8 py-5 text-sm font-semibold text-slate-500">{{ trans.data }}</td>
+                                <td class="px-8 py-5 text-sm italic">{{ trans.tipo }}</td>
+                                <td class="px-8 py-5 text-sm font-bold {{ trans.cor if trans.cor else 'text-slate-900' }}">
+                                    R$ {{ "%.2f"|format(trans.valor|float) }}
+                                </td>
+                                <td class="px-8 py-5">
+                                    <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-black rounded-full uppercase flex items-center w-fit gap-1">
+                                        <span class="material-symbols-outlined text-[12px]">verified</span> Sucesso
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="4" class="px-8 py-10 text-center text-slate-400 italic">Aguardando primeira transação via rede Stellar...</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('growthChart').getContext('2d');
+            const valorAtual = parseFloat("{{ total_fundo }}") || 0;
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai'],
+                    datasets: [{
+                        label: 'Saldo do Fundo (R$)',
+                        data: [valorAtual * 0.4, valorAtual * 0.6, valorAtual * 0.75, valorAtual * 0.9, valorAtual],
+                        borderColor: '#087f8c',
+                        backgroundColor: 'rgba(8, 127, 140, 0.1)',
+                        borderWidth: 4,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 6,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#087f8c',
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

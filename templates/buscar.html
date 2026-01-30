@@ -1,53 +1,123 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Buscar Vizinhos - Vizinhança Cuidadora</title>
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; }
-        .container { max-width: 800px; margin: auto; }
-        .search-box { margin-bottom: 30px; text-align: center; }
-        input[type="text"] { padding: 12px; width: 60%; border-radius: 8px; border: 1px solid #ddd; }
-        .card { 
-            background: white; padding: 20px; border-radius: 12px; 
-            margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .btn { 
-            background: #27ae60; color: white; padding: 10px 20px; 
-            text-decoration: none; border-radius: 6px; font-weight: bold; 
-        }
-        .stellar-tag { 
-            font-size: 11px; color: #7d3cff; background: #f3e5f5; 
-            padding: 4px 8px; border-radius: 4px; display: inline-block; margin-top: 5px;
-        }
-    </style>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Buscar Profissionais | Vizinhança Cuidadora</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: "#0e6479", secondary: "#ef711b", "accent-teal": "#1ab1b8", "background-light": "#f8fafc" },
+                    fontFamily: { sans: ["Nunito", "sans-serif"] },
+                }
+            }
+        };
+    </script>
 </head>
-<body>
-    <div class="container">
-        <div class="search-box">
-            <h1>🔍 Encontrar Vizinhos</h1>
-            <form action="/buscar" method="GET">
-                <input type="text" name="q" placeholder="Ex: Enfermagem, Centro..." value="{{ busca }}">
-                <button type="submit" class="btn">Buscar</button>
+<body class="bg-background-light text-slate-800 min-h-screen">
+
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl overflow-hidden shadow-sm border border-slate-100">
+                    <img src="{{ url_for('static', filename='img.jpg') }}" alt="Logo" class="w-full h-full object-cover">
+                </div>
+                <span class="text-xl font-black text-primary tracking-tight">Vizinhança Cuidadora</span>
+            </div>
+            <a href="/admin" class="text-sm font-bold text-slate-500 hover:text-primary transition">Painel Admin</a>
+        </div>
+    </nav>
+
+    <div class="bg-primary py-12 px-4 mb-8">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-6">Encontre cuidadores no {{ busca if busca else 'seu bairro' }}</h1>
+            <form action="/buscar" method="GET" class="relative group">
+                <span class="material-icons-round absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">search</span>
+                <input type="text" name="q" placeholder="Ex: Fisioterapeuta, Enfermagem, Cuidador..." 
+                       value="{{ busca }}"
+                       class="w-full pl-12 pr-4 py-4 rounded-2xl border-none shadow-xl focus:ring-4 focus:ring-accent-teal/30 text-lg transition-all">
             </form>
         </div>
-
-        {% for p in profissionais %}
-       <div class="card" style="display: flex; justify-content: space-between; align-items: center; background: white; padding: 15px; margin-bottom: 10px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-    <div>
-        <h3 style="margin: 0;">{{ p[0] }}</h3>
-        <p style="margin: 5px 0; color: #666;">{{ p[1] }} | {{ p[2] }}</p>
-        <strong style="color: #27ae60;">Preço: R$ {{ "%.2f"|format(p[4]) if p[4] else "0.00" }}</strong>
     </div>
-    <a href="/pagamento/{{ p[0] }}" class="btn" style="background: #7d3cff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Contratar</a>
-</div>
+
+    <main class="max-w-7xl mx-auto px-4 pb-12">
+        <div class="flex justify-between items-center mb-8">
+            <p class="text-slate-500 font-medium">Mostrando <span class="text-slate-900 font-bold">{{ profissionais|length }}</span> profissionais validados</p>
+        </div>
+
+        {% if profissionais %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for prof in profissionais %}
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-6 flex flex-col gap-5">
+                
+                <div class="flex justify-between items-start">
+                    <div class="w-14 h-14 bg-accent-teal/10 text-accent-teal rounded-2xl flex items-center justify-center text-xl font-black">
+                        {{ prof.nome[:2]|upper }}
+                    </div>
+                    <span class="bg-emerald-50 text-emerald-600 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-emerald-100 flex items-center gap-1">
+                        <span class="material-icons-round text-xs">verified</span> Validado
+                    </span>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-extrabold text-slate-900 capitalize">{{ prof.nome }}</h3>
+                    <p class="text-primary font-bold flex items-center gap-1">
+                        <span class="material-icons-round text-sm">medical_services</span>
+                        {{ prof.especialidade }}
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                        <p class="text-[9px] text-slate-400 uppercase font-bold tracking-tighter">Localidade</p>
+                        <p class="text-sm font-bold text-slate-700 truncate">{{ prof.localidade }}</p>
+                    </div>
+                    <div class="bg-teal-50 p-3 rounded-2xl border border-teal-100">
+                        <p class="text-[9px] text-teal-600/60 uppercase font-bold tracking-tighter">Valor/h</p>
+                        <p class="text-sm font-bold text-primary">R$ {{ "%.2f"|format(prof.valor_servico|float) }}</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 rounded-2xl p-4 border border-slate-800">
+                    <div class="flex justify-between items-center mb-1">
+                        <p class="text-[9px] text-slate-500 uppercase font-bold tracking-widest">Stellar Wallet</p>
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    </div>
+                    <p class="text-[10px] font-mono text-teal-400/80 truncate">
+                        {{ prof.stellar_pubkey if prof.stellar_pubkey else 'CARTEIRA_NAO_ATIVA' }}
+                    </p>
+                </div>
+
+                <a href="{{ url_for('pagamento', id=prof.id) }}" 
+                   class="w-full bg-secondary hover:bg-orange-600 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-orange-100 active:scale-95">
+                    <span class="material-icons-round">payments</span> Contratar Agora
+                </a>
+            </div>
+            {% endfor %}
+        </div>
         {% else %}
-        <p style="text-align: center; color: #999;">Nenhum profissional validado encontrado.</p>
-        {% endfor %}
+        <div class="bg-white rounded-3xl border border-dashed border-slate-300 p-20 text-center">
+            <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span class="material-icons-round text-4xl text-slate-300">person_search</span>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-800 mb-2">Ops! Nenhum cuidador encontrado.</h2>
+            <p class="text-slate-500 max-w-sm mx-auto mb-8">Não encontramos profissionais para sua busca. Tente buscar por uma especialidade ou bairro diferente.</p>
+            <a href="/buscar" class="text-primary font-bold hover:underline">Limpar filtros e buscar novamente</a>
+        </div>
+        {% endif %}
+    </main>
 
-        <br>
-        <a href="/" style="color: #666; text-decoration: none;">← Voltar ao início</a>
-    </div>
+    <script>
+        // Fallback para imagem caso o arquivo static/img.jpg não exista
+        document.querySelectorAll('img').forEach(img => {
+            img.onerror = function() {
+                this.src = 'https://ui-avatars.com/api/?name=VC&background=0e6479&color=fff&bold=true';
+            };
+        });
+    </script>
 </body>
 </html>

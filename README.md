@@ -1,47 +1,90 @@
-# 🏥 Vizinhança Cuidadora: Tecnologia para o Cuidado Hiperlocal
+# 🏠 Vizinhança Cuidadora
 
-A **Vizinhança Cuidadora** é uma plataforma de impacto social (**Socialtech**) que conecta profissionais de saúde e cuidadores a moradores de suas próprias comunidades. O projeto utiliza tecnologia **Blockchain (Web3)** para garantir transparência e um modelo de **Economia Circular** para fortalecer associações de moradores.
+![Versão](https://img.shields.io/badge/versão-1.0.0-blue)
+![Python](https://img.shields.io/badge/Python-3.9+-green)
+![Flask](https://img.shields.io/badge/Framework-Flask-lightgrey)
+![Blockchain](https://img.shields.io/badge/Blockchain-Stellar-purple)
+
+Uma plataforma comunitária que conecta profissionais de saúde e apoio a moradores locais, utilizando a **Blockchain Stellar** para garantir pagamentos transparentes e a sustentabilidade de um fundo social comunitário.
 
 ---
 
-## 🌟 Diferenciais Técnicos e Pontos Fortes
+## 🚀 Sobre o Projeto
 
-### 🛡️ 1. Governança e Validação Social
-O sistema implementa um fluxo de aprovação obrigatório via painel administrativo (`/admin`). O profissional só é indexado na busca após a **Associação de Moradores validar suas credenciais**, transformando a associação no "selo de confiança" da rede.
+O **Vizinhança Cuidadora** descentraliza a contratação de serviços de cuidado. O sistema permite uma curadoria rigorosa de profissionais e uma distribuição de valores automatizada, onde cada transação beneficia não apenas o cuidador, mas toda a comunidade local.
 
-### 💰 2. Fintech Social & Divisão Automática (80/15/5)
-O algoritmo de pagamento traduz o plano de negócios diretamente na interface, realizando o repasse automático:
-* **80% (Repasse Direto):** Autonomia financeira para o profissional local.
-* **15% (Fundo Comunitário):** Reinvestimento direto na Associação de Moradores.
-* **5% (Plataforma):** Manutenção da infraestrutura tecnológica.
+### 💸 O Modelo de Impacto (Split de Pagamento)
+Para cada serviço contratado, o valor é dividido automaticamente:
+* **80%**: Destinado diretamente ao **Profissional**.
+* **15%**: Reinvestido no **Fundo Comunitário** da vizinhança.
+* **5%**: Taxa de **operação e manutenção** da rede.
 
-### ⛓️ 3. Integração com Blockchain Stellar
-Diferente de sistemas comuns, utilizamos a rede **Stellar** para criar uma camada de confiança descentralizada:
-* **Identidade Digital:** Geração automática de chaves públicas e privadas para cada profissional.
-* **Financiamento Testnet:** Integração com o *Friendbot* para ativação automática de contas com ativos de teste.
-* **Segurança de Chaves:** Exibição encurtada de endereços (Ex: `GD72...W3P2`) para melhor UX.
 
-### 📱 4. Arquitetura Mobile-First e Acessível
-Interface desenvolvida com foco em inclusão digital:
-* **UX Intuitiva:** Botões grandes e cores contrastantes para diversos níveis de literacia digital.
-* **Segurança:** Uso de `.gitignore` para proteger dados sensíveis e o banco de dados `vizinhanca.db`.
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
-| Camada | Tecnologia |
-| :--- | :--- |
-| **Backend** | Python 3.x / Flask |
-| **Banco de Dados** | SQLite3 |
-| **Blockchain** | Stellar SDK (Testnet) |
-| **Frontend** | HTML5 / CSS3 (Responsivo) |
+* **Backend**: Python 3.9+ com Flask.
+* **Banco de Dados**: SQLite3 para persistência local.
+* **Frontend**: HTML5, Jinja2 e Tailwind CSS.
+* **Blockchain**: Integração com a rede Stellar (Simulação via Public Keys).
+* **Gráficos**: Chart.js para monitoramento financeiro.
 
 ---
 
-## 💻 Como Executar o MVP
+## 📦 Funcionalidades Implementadas
 
-1. **Clone o repositório:**
-   ```bash
-   git clone [https://github.com/SEU_USUARIO/vizinhanca-cuidadora.git](https://github.com/SEU_USUARIO/vizinhanca-cuidadora.git)
-   cd vizinhanca-cuidadora
+### 👤 Usuário (Morador)
+- [x] **Busca Inteligente**: Filtros por nome, especialidade ou bairro.
+- [x] **Checkout Transparente**: Resumo detalhado da distribuição do pagamento.
+- [x] **Segurança**: Acesso apenas a profissionais com certificados validados.
+
+### 🏥 Profissional (Cuidador)
+- [x] **Onboarding Digital**: Upload seguro de certificados profissionais.
+- [x] **Carteira Digital**: Vinculação de Chave Pública Stellar para recebimentos.
+
+### 🛡️ Administrativo
+- [x] **Gestão de Aprovações**: Interface para validar documentos e habilitar profissionais.
+- [x] **Dashboard Financeiro**: Gráficos de crescimento do fundo e histórico de transações.
+
+---
+
+## 📋 Como Instalar e Rodar
+
+1.  **Clone o repositório**:
+    ```bash
+    git clone [https://github.com/seu-usuario/vizinhanca-cuidadora.git](https://github.com/seu-usuario/vizinhanca-cuidadora.git)
+    cd vizinhanca-cuidadora
+    ```
+
+2.  **Configure o ambiente virtual**:
+    ```bash
+    python -m venv venv
+    # Ative o venv:
+    # Windows: venv\Scripts\activate | Linux/Mac: source venv/bin/activate
+    ```
+
+3.  **Instale as dependências**:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+4.  **Execute a aplicação**:
+    ```bash
+    python app.py
+    ```
+    Acesse em: `http://127.0.0.1:5000`.
+
+---
+
+## 🏗️ Estrutura do Projeto
+
+```text
+├── app.py              # Servidor Flask e rotas principais
+├── vizinhanca.db       # Banco de dados SQLite
+├── /templates          # Páginas HTML (Admin, Buscar, Pagamento)
+├── /static             # Ativos estáticos (Imagens, CSS, JS)
+├── /certificados       # Documentos enviados (protegido por .gitignore)
+└── .gitignore          # Regras de exclusão de arquivos sensíveis
+Este projeto está sob a licença MIT.

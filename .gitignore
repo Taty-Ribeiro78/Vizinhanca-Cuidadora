@@ -1,15 +1,68 @@
-# Banco de Dados Local (Dados Sensíveis e Chaves)
-vizinhanca.db
+### --- VIZINHANÇA CUIDADORA: GITIGNORE --- ###
 
-# Pastas de Upload (Certificados e PDFs)
-certificados/
+# --- BANCO DE DADOS ---
+# Protege os dados dos profissionais e chaves Stellar
+*.db
+*.db-journal
+*.sqlite3
 
-# Python (Arquivos temporários e compilados)
+# --- UPLOAD DE DOCUMENTOS ---
+# Ignora certificados sensíveis, mas mantém a estrutura da pasta
+certificados/*
+!certificados/.gitkeep
+
+# --- AMBIENTE VIRTUAL (Python) ---
+# Evita subir gigabytes de bibliotecas instaladas
+.venv/
+venv/
+env/
+ENV/
+bin/
+lib/
+include/
+share/
+
+# --- PYTHON (Temporários e Cache) ---
+# Limpa arquivos de compilação que não devem ser versionados
 __pycache__/
 *.py[cod]
 *$py.class
-venv/
-.env
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+*.egg-info/
+.installed.cfg
+*.egg
 
-# Configurações do VS Code
+# --- VARIÁVEIS DE AMBIENTE ---
+# NUNCA suba arquivos que contenham a SECRET_KEY do Flask
+.env
+.flaskenv
+
+# --- TESTES E COBERTURA ---
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nosepy
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# --- CONFIGURAÇÕES DE EDITOR (VS Code / PyCharm) ---
 .vscode/
+.idea/
+*.swp
+*.swo
+
+# --- ARQUIVOS DE SISTEMA ---
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini

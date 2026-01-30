@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Vizinhança Cuidadora - Conectando profissionais de saúde da comunidade">
+    <title>Vizinhança Cuidadora | Painel Administrativo</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    screens: { 'xs': '400px' },
+                    colors: {
+                        primary: { DEFAULT: "#0a7489", dark: "#065466", light: "#e6f4f7" },
+                        secondary: { DEFAULT: "#f26522", dark: "#d4561a", light: "#fef2eb" },
+                        "background-light": "#fffcf2", "background-dark": "#0f172a",
+                        "surface-light": "#ffffff", "surface-dark": "#1e293b"
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                        'display': ['Montserrat', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        *:focus-visible {
+            outline: 2px solid #0a7489;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+
+<body class="font-sans bg-background-light dark:bg-background-dark text-gray-800 dark:text-gray-100 transition-colors duration-300 min-h-screen flex flex-col">
+
+    <header class="sticky top-0 w-full z-50 bg-surface-light/95 dark:bg-surface-dark/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 sm:h-20">
+                
+                <a href="/" class="flex items-center gap-2 shrink-0">
+                    <img alt="Logo" class="h-8 w-8 sm:h-10 sm:w-10 rounded-lg object-cover shadow-md" src="{{ url_for('static', filename='img.jpg') }}">
+                    <span class="font-display font-bold text-primary text-xs sm:text-lg uppercase hidden xs:block leading-tight">
+                        Vizinhança<br /><span class="text-secondary">Cuidadora</span>
+                    </span>
+                </a>
+
+                <div class="flex items-center gap-2 sm:gap-6">
+                    <a class="font-semibold text-gray-600 dark:text-gray-300 hover:text-primary transition-colors flex items-center gap-1 text-[11px] sm:text-base" href="/admin">
+                        <span class="material-symbols-outlined text-[18px] sm:text-[22px]">admin_panel_settings</span>
+                        <span>Painel Admin</span>
+                    </a>
+                    
+                    <a href="/cadastro" class="bg-primary hover:bg-primary-dark text-white px-3 sm:px-5 py-2 rounded-full font-semibold transition-all text-[11px] sm:text-base whitespace-nowrap shadow-sm">
+                        Sou Profissional
+                    </a>
+
+                    <button id="theme-toggle" class="p-1.5 sm:p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <span class="material-symbols-outlined block dark:hidden text-[20px] sm:text-[24px]">dark_mode</span>
+                        <span class="material-symbols-outlined hidden dark:block text-[20px] sm:text-[24px]">light_mode</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-8">
+                    <h1 class="font-display text-4xl md:text-6xl font-extrabold leading-tight text-gray-900 dark:text-white">
+                        Cuidado que fica no <span class="text-primary">bairro.</span>
+                    </h1>
+                    <p class="text-lg text-gray-600 dark:text-gray-300 max-w-lg">
+                        Conectamos profissionais de saúde qualificados da sua comunidade para cuidados humanizados.
+                    </p>
+                    <div class="bg-surface-light dark:bg-surface-dark p-2 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 flex gap-2 max-w-md">
+                        <input class="flex-grow p-3 bg-transparent border-none focus:ring-0" placeholder="Qual serviço você precisa?" type="text">
+                        <button class="bg-secondary hover:bg-secondary-dark text-white px-6 py-3 rounded-xl font-semibold transition-all">
+                            Buscar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div class="rounded-[2rem] overflow-hidden shadow-2xl border-8 border-surface-light dark:border-surface-dark bg-gray-200">
+                        <img alt="Cuidado" class="w-full h-[400px] object-cover" src="{{ url_for('static', filename='img2.jpg') }}">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="admin-panel" class="bg-gray-50 dark:bg-gray-900/30 py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mb-12">
+                    <h2 class="text-3xl font-display font-bold flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary text-4xl">dashboard</span>
+                        Painel Administrativo
+                    </h2>
+                </div>
+
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <div class="bg-surface-light dark:bg-surface-dark p-8 rounded-3xl shadow-sm border border-gray-200 dark:border-gray-800">
+                        <h3 class="font-bold text-xl mb-6">Rede Ativa</h3>
+                        <div class="space-y-4">
+                            <div class="flex justify-between py-3 border-b dark:border-gray-800">
+                                <span class="text-gray-500">Profissionais</span>
+                                <span class="font-bold text-primary">84</span>
+                            </div>
+                            <div class="flex justify-between py-3">
+                                <span class="text-gray-500">Pendentes</span>
+                                <span class="font-bold text-secondary">5</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-2 bg-surface-light dark:bg-surface-dark p-8 rounded-3xl shadow-sm border border-gray-200 dark:border-gray-800">
+                        <h3 class="font-bold text-xl mb-6">Solicitações Recentes</h3>
+                        <div class="bg-gray-50 dark:bg-gray-900/50 p-6 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-4">
+                            <p class="text-gray-700 dark:text-gray-300">5 novos perfis aguardam validação de documentos.</p>
+                            <button class="bg-primary text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-primary-dark transition-all">Analisar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-gray-200 dark:border-gray-800 py-10 text-center">
+        <p class="text-sm text-gray-500">© 2026 Vizinhança Cuidadora.</p>
+    </footer>
+
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        }
+
+        if(themeToggle) themeToggle.addEventListener('click', toggleTheme);
+
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+</body>
+</html>
