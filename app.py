@@ -1,6 +1,6 @@
 import os
 import sqlite3
-from flask import Flask,render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
@@ -83,11 +83,9 @@ def cadastrar_profissional():
     especialidade = request.form.get('especialidade')
     localidade = request.form.get('localidade')
     
-    # --- 1. Inicialização das variáveis (Resolve o erro da imagem) ---
     valor = 0.0
     caminho_certificado = ""
 
-    # --- 2. Processamento do Valor ---
     try:
         valor_str = request.form.get('valor_servico')
         if valor_str:
@@ -95,19 +93,15 @@ def cadastrar_profissional():
     except (ValueError, TypeError):
         valor = 0.0
 
-    # --- 3. Processamento do Arquivo ---
     arquivo = request.files.get('certificado')
     if arquivo and arquivo.filename != '':
         nome_arquivo = secure_filename(f"{nome}_{arquivo.filename}")
         caminho_certificado = os.path.join(UPLOAD_FOLDER, nome_arquivo)
         arquivo.save(caminho_certificado)
 
-    # --- 4. Validação de Duplicidade e Inserção ---
     try:
         with conectar_bd() as conexao:
             cursor = conexao.cursor()
-            
-            # Verificação manual antes de inserir (Double Check)
             cursor.execute("SELECT id FROM profissionais WHERE nome = ?", (nome,))
             if cursor.fetchone():
                 flash(f"O profissional '{nome}' já possui um cadastro pendente ou ativo.", "danger")
@@ -126,6 +120,7 @@ def cadastrar_profissional():
         flash(f"Erro inesperado: {str(e)}", "danger")
 
     return redirect(url_for('home'))
+
 # --- ÁREA ADMINISTRATIVA ---
 
 @app.route('/admin')
@@ -136,19 +131,16 @@ def admin_geral():
         pendentes = cursor.fetchall()
         cursor.execute("SELECT * FROM profissionais WHERE validado = 1")
         validados = cursor.fetchall()
-        cursor.execute("SELECT * FROM profissionais ORDER BY id DESC LIMIT 1")
-        ultimo_prof = cursor.fetchone()
-
+        
         agendamentos_ficticios = [
             {'iniciais': 'MA', 'paciente': 'Maria Andrade', 'endereco': 'Rua Flores, 123', 'horario': '09:00', 'status': 'Confirmado'},
             {'iniciais': 'JS', 'paciente': 'João Silva', 'endereco': 'Av. Central, 450', 'horario': '14:30', 'status': 'Pendente'}
         ]
 
-    return render_template('admin.html', profissionais=pendentes, validados=validados, agendamentos=agendamentos_ficticios, prof=ultimo_prof)
+    return render_template('admin.html', profissionais=pendentes, validados=validados, agendamentos=agendamentos_ficticios)
 
 @app.route('/admin/financeiro', endpoint='admin_financas')
 def admin_financas():
-    # Dados para o admin_financas.html
     dados = {
         'total_fundo': 5420.50,
         'total_pros': 12,
@@ -160,7 +152,7 @@ def admin_financas():
     }
     return render_template('admin_financas.html', **dados)
 
-# --- AÇÕES E PAGAMENTO ---
+# --- AÇÕES ---
 
 @app.route('/validar/<int:id>')
 def validar_profissional(id):
@@ -179,6 +171,18 @@ def criar_carteira(id):
         cursor.execute("UPDATE profissionais SET stellar_pubkey = ? WHERE id = ?", (chave_fake, id))
         conexao.commit()
     flash("Carteira Stellar ativada!", "success")
+    return redirect(url_for('admin_geral'))
+
+@app.route('/excluir_profissional/<int:id>')
+def excluir_profissional(id):
+    try:
+        with conectar_bd() as conexao:
+            cursor = conexao.cursor()
+            cursor.execute("DELETE FROM profissionais WHERE id = ?", (id,))
+            conexao.commit()
+        flash('Cadastro removido do sistema.', 'success')
+    except Exception as e:
+        flash(f'Erro ao excluir: {str(e)}', 'danger')
     return redirect(url_for('admin_geral'))
 
 @app.route('/pagamento/<int:id>')
