@@ -173,18 +173,6 @@ def criar_carteira(id):
     flash("Carteira Stellar ativada!", "success")
     return redirect(url_for('admin_geral'))
 
-@app.route('/excluir_profissional/<int:id>')
-def excluir_profissional(id):
-    try:
-        with conectar_bd() as conexao:
-            cursor = conexao.cursor()
-            cursor.execute("DELETE FROM profissionais WHERE id = ?", (id,))
-            conexao.commit()
-        flash('Cadastro removido do sistema.', 'success')
-    except Exception as e:
-        flash(f'Erro ao excluir: {str(e)}', 'danger')
-    return redirect(url_for('admin_geral'))
-
 @app.route('/pagamento/<int:id>')
 def pagamento(id):
     profissional = buscar_profissional_por_id(id)
