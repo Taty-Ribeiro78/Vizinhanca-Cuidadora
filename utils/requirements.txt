@@ -1,0 +1,16 @@
+# Web Framework
+Flask==3.0.0
+Jinja2==3.1.2
+
+# Blockchain & Finance
+stellar-sdk==9.0.0
+
+# Database & Utilities
+Flask-SQLAlchemy==3.1.1
+python-dotenv==1.0.0
+
+# Image/File Handling (para o Onboarding de certificados)
+Werkzeug==3.0.1
+
+# Gráficos (Servidos via CDN no HTML, mas úteis para processamento de dados no backend)
+pandas==2.1.0
