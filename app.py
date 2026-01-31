@@ -23,7 +23,7 @@ def configurar_tabela():
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS profissionais (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nome TEXT NOT NULL,
+            nome TEXT NOT NULL UNIQUE,
             especialidade TEXT NOT NULL,
             valor_servico REAL NOT NULL,
             localidade TEXT NOT NULL,
@@ -83,29 +83,49 @@ def cadastrar_profissional():
     especialidade = request.form.get('especialidade')
     localidade = request.form.get('localidade')
     
+    # --- 1. Inicialização das variáveis (Resolve o erro da imagem) ---
+    valor = 0.0
+    caminho_certificado = ""
+
+    # --- 2. Processamento do Valor ---
     try:
         valor_str = request.form.get('valor_servico')
-        valor = float(valor_str.replace(',', '.')) if valor_str else 0.0
+        if valor_str:
+            valor = float(valor_str.replace(',', '.'))
     except (ValueError, TypeError):
         valor = 0.0
 
+    # --- 3. Processamento do Arquivo ---
     arquivo = request.files.get('certificado')
-    caminho_certificado = ""
     if arquivo and arquivo.filename != '':
         nome_arquivo = secure_filename(f"{nome}_{arquivo.filename}")
         caminho_certificado = os.path.join(UPLOAD_FOLDER, nome_arquivo)
         arquivo.save(caminho_certificado)
 
-    with conectar_bd() as conexao:
-        cursor = conexao.cursor()
-        cursor.execute("""
-            INSERT INTO profissionais (nome, especialidade, valor_servico, localidade, validado, certificado_path)
-            VALUES (?, ?, ?, ?, 0, ?)
-        """, (nome, especialidade, valor, localidade, caminho_certificado))
-    
-    flash("Cadastro enviado com sucesso!", "info")
-    return redirect(url_for('home'))
+    # --- 4. Validação de Duplicidade e Inserção ---
+    try:
+        with conectar_bd() as conexao:
+            cursor = conexao.cursor()
+            
+            # Verificação manual antes de inserir (Double Check)
+            cursor.execute("SELECT id FROM profissionais WHERE nome = ?", (nome,))
+            if cursor.fetchone():
+                flash(f"O profissional '{nome}' já possui um cadastro pendente ou ativo.", "danger")
+                return redirect(url_for('cadastro'))
 
+            cursor.execute("""
+                INSERT INTO profissionais (nome, especialidade, valor_servico, localidade, validado, certificado_path)
+                VALUES (?, ?, ?, ?, 0, ?)
+            """, (nome, especialidade, valor, localidade, caminho_certificado))
+            conexao.commit()
+            
+        flash("Cadastro enviado com sucesso! Aguarde a validação.", "success")
+    except sqlite3.IntegrityError:
+        flash("Erro: Este nome já está registrado no sistema.", "danger")
+    except Exception as e:
+        flash(f"Erro inesperado: {str(e)}", "danger")
+
+    return redirect(url_for('home'))
 # --- ÁREA ADMINISTRATIVA ---
 
 @app.route('/admin')
