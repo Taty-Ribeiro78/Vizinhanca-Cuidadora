@@ -45,6 +45,7 @@ def configurar_tabela():
     conn.commit()
     conn.close()
 
+# Inicializa o banco ao rodar o app
 configurar_tabela()
 
 # --- AUXILIARES ---
@@ -70,8 +71,10 @@ def buscar():
     with conectar_bd() as conexao:
         cursor = conexao.cursor()
         if busca:
-            cursor.execute("SELECT * FROM profissionais WHERE validado = 1 AND (nome LIKE ? OR especialidade LIKE ? OR localidade LIKE ?)", 
-                           (f'%{busca}%', f'%{busca}%', f'%{busca}%'))
+            cursor.execute("""
+                SELECT * FROM profissionais 
+                WHERE validado = 1 AND (nome LIKE ? OR especialidade LIKE ? OR localidade LIKE ?)
+            """, (f'%{busca}%', f'%{busca}%', f'%{busca}%'))
         else:
             cursor.execute("SELECT * FROM profissionais WHERE validado = 1")
         profissionais = cursor.fetchall()
@@ -114,8 +117,6 @@ def cadastrar_profissional():
             conexao.commit()
             
         flash("Cadastro enviado com sucesso! Aguarde a validação.", "success")
-    except sqlite3.IntegrityError:
-        flash("Erro: Este nome já está registrado no sistema.", "danger")
     except Exception as e:
         flash(f"Erro inesperado: {str(e)}", "danger")
 
@@ -127,17 +128,24 @@ def cadastrar_profissional():
 def admin_geral():
     with conectar_bd() as conexao:
         cursor = conexao.cursor()
+        # Profissionais aguardando validação
         cursor.execute("SELECT * FROM profissionais WHERE validado = 0")
         pendentes = cursor.fetchall()
+        
+        # Profissionais já aprovados
         cursor.execute("SELECT * FROM profissionais WHERE validado = 1")
         validados = cursor.fetchall()
         
+        # Agendamentos para o dashboard (Simulados ou do BD)
         agendamentos_ficticios = [
             {'iniciais': 'MA', 'paciente': 'Maria Andrade', 'endereco': 'Rua Flores, 123', 'horario': '09:00', 'status': 'Confirmado'},
             {'iniciais': 'JS', 'paciente': 'João Silva', 'endereco': 'Av. Central, 450', 'horario': '14:30', 'status': 'Pendente'}
         ]
 
-    return render_template('admin.html', profissionais=pendentes, validados=validados, agendamentos=agendamentos_ficticios)
+    return render_template('admin.html', 
+                           profissionais=pendentes, 
+                           validados=validados, 
+                           agendamentos=agendamentos_ficticios)
 
 @app.route('/admin/financeiro', endpoint='admin_financas')
 def admin_financas():
@@ -165,6 +173,7 @@ def validar_profissional(id):
 
 @app.route('/criar_carteira/<int:id>')
 def criar_carteira(id):
+    # Simulação de geração de chave pública Stellar
     chave_fake = f"GB{id}STELLAR" + ("X" * (56 - len(f"GB{id}STELLAR")))
     with conectar_bd() as conexao:
         cursor = conexao.cursor()
