@@ -89,7 +89,7 @@
                             <p class="text-primary font-medium">{{ pro.especialidade }} • {{ pro.localidade }}</p>
                         </div>
                     </div>
-                    <<div class="flex gap-3">
+                    <div class="flex gap-3">
                         {% if not pro.stellar_pubkey %}
                         <a href="{{ url_for('criar_carteira', id=pro.id) }}"
                             class="px-6 py-3 bg-secondary text-white rounded-xl font-bold shadow-md hover:scale-105 transition-transform">
@@ -101,7 +101,7 @@
                             <span class="material-symbols-outlined text-sm">verified</span> Aprovar
                         </a>
                         {% endif %}
-                </div>
+                    </div>
         </section>
 
         <section id="tab-dashboard" class="hidden">
