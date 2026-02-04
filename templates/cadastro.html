@@ -39,7 +39,7 @@
         input, textarea, select { border-radius: 1.25rem !important; }
     </style>
 </head>
-<body class="bg-background-light text-slate-800" x-data="{ step: 1 }">
+<body class="bg-background-light text-slate-800" x-data="{ step: 1, submitted: false }">
     <div class="sunburst-bg"></div>
     
     <nav class="p-8 flex justify-between items-center max-w-7xl mx-auto">
@@ -58,12 +58,12 @@
     </nav>
 
     <main class="max-w-4xl mx-auto px-6 py-4">
-        <header class="mb-12 text-center">
+        <header class="mb-12 text-center" x-show="!submitted">
             <h1 class="text-4xl md:text-5xl font-black text-primary mb-4 tracking-tight">Sua comunidade precisa do seu talento.</h1>
             <p class="text-slate-500 text-lg font-medium">Faça seu cadastro para começar a atender vizinhos com segurança.</p>
         </header>
 
-        <div class="relative mb-16 max-w-sm mx-auto">
+        <div class="relative mb-16 max-w-sm mx-auto" x-show="!submitted">
             <div class="absolute top-1/2 left-0 w-full h-1 bg-gray-200 -translate-y-1/2 rounded-full"></div>
             <div :style="`width: ${(step - 1) * 50}%`" class="absolute top-1/2 left-0 h-1 bg-secondary -translate-y-1/2 rounded-full transition-all duration-500"></div>
             <div class="relative flex justify-between items-center">
@@ -76,7 +76,7 @@
             </div>
         </div>
 
-        <form action="/enviar_cadastro" method="POST" enctype="multipart/form-data" class="glass-panel p-10 md:p-16 border border-white">
+        <form @submit.prevent="submitted = true" x-show="!submitted" class="glass-panel p-10 md:p-16 border border-white">
             
             <div x-show="step === 1" x-transition.opacity>
                 <div class="mb-10 flex items-center gap-3">
@@ -161,7 +161,7 @@
                 <div class="bg-primary/5 p-8 rounded-[2rem] border border-primary/10 mb-8 flex gap-6">
                     <span class="material-icons-round text-primary text-4xl">verified</span>
                     <p class="text-slate-600 font-medium leading-relaxed">
-                        Para sua segurança, criaremos um <strong>Código de Recebimento Único</strong> via blockchain. Isso garante que cada serviço seja registrado e pago sem erros, de forma protegida contra fraudes.
+                        Para sua segurança, criaremos um <strong>Código de Recebimento Único</strong>. Isso garante que cada serviço seja registrado e pago sem erros, de forma protegida contra fraudes.
                     </p>
                 </div>
 
@@ -182,8 +182,26 @@
                 </div>
             </div>
         </form>
+
+        <div x-show="submitted" x-transition.scale.90 x-cloak class="glass-panel p-16 text-center border-2 border-accent-teal/20">
+            <div class="w-24 h-24 bg-accent-teal/10 rounded-full flex items-center justify-center mx-auto mb-8">
+                <span class="material-icons-round text-accent-teal text-6xl animate-bounce">check_circle</span>
+            </div>
+            <h2 class="text-3xl font-black text-primary mb-4">Cadastro enviado com sucesso!</h2>
+            <p class="text-slate-500 mb-10 max-w-md mx-auto leading-relaxed">
+                Agora nossa equipe e a associação de moradores vão validar seus dados. Você receberá uma notificação em breve!
+            </p>
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <a href="/" class="bg-dark-button hover:bg-primary text-white font-black py-4 px-10 rounded-2xl transition-all shadow-lg">
+                    Voltar para a Home
+                </a>
+                <button @click="submitted = false; step = 1" class="text-primary font-bold py-4 px-10 hover:underline">
+                    Fazer outro cadastro
+                </button>
+            </div>
+        </div>
         
-        <p class="mt-8 text-center text-slate-400 text-xs font-bold uppercase tracking-widest">
+        <p class="mt-8 text-center text-slate-400 text-xs font-bold uppercase tracking-widest" x-show="!submitted">
             Suas informações são protegidas e usadas apenas para validação comunitária.
         </p>
     </main>
