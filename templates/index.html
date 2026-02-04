@@ -4,157 +4,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Vizinhança Cuidadora - Conectando profissionais de saúde da comunidade">
-    <title>Vizinhança Cuidadora | Painel Administrativo</title>
+    <meta name="description" content="Vizinhança Cuidadora - Cuidado de saúde de vizinho para vizinho">
+    <title>Vizinhança Cuidadora | Cuidado Local</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
 
     <script>
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
-                    screens: { 'xs': '400px' },
                     colors: {
                         primary: { DEFAULT: "#0a7489", dark: "#065466", light: "#e6f4f7" },
                         secondary: { DEFAULT: "#f26522", dark: "#d4561a", light: "#fef2eb" },
-                        "background-light": "#fffcf2", "background-dark": "#0f172a",
-                        "surface-light": "#ffffff", "surface-dark": "#1e293b"
+                        community: "#1ab1b8"
                     },
-                    fontFamily: {
-                        'sans': ['Inter', 'sans-serif'],
-                        'display': ['Montserrat', 'sans-serif']
-                    }
+                    fontFamily: { 'sans': ['Inter', 'sans-serif'], 'display': ['Montserrat', 'sans-serif'] }
                 }
             }
         }
     </script>
-
-    <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-
-        *:focus-visible {
-            outline: 2px solid #0a7489;
-            outline-offset: 2px;
-        }
-    </style>
 </head>
 
-<body class="font-sans bg-background-light dark:bg-background-dark text-gray-800 dark:text-gray-100 transition-colors duration-300 min-h-screen flex flex-col">
+<body class="font-sans bg-[#fffcf2] dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-300">
 
-    <header class="sticky top-0 w-full z-50 bg-surface-light/95 dark:bg-surface-dark/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16 sm:h-20">
-                
-                <a href="/" class="flex items-center gap-2 shrink-0">
-                    <img alt="Logo" class="h-8 w-8 sm:h-10 sm:w-10 rounded-lg object-cover shadow-md" src="{{ url_for('static', filename='img.jpg') }}">
-                    <span class="font-display font-bold text-primary text-xs sm:text-lg uppercase hidden xs:block leading-tight">
-                        Vizinhança<br /><span class="text-secondary">Cuidadora</span>
-                    </span>
-                </a>
-
-                <div class="flex items-center gap-2 sm:gap-6">
-                    <a class="font-semibold text-gray-600 dark:text-gray-300 hover:text-primary transition-colors flex items-center gap-1 text-[11px] sm:text-base" href="/admin">
-                        <span class="material-symbols-outlined text-[18px] sm:text-[22px]">admin_panel_settings</span>
-                        <span>Painel Admin</span>
-                    </a>
-                    
-                    <a href="/cadastro" class="bg-primary hover:bg-primary-dark text-white px-3 sm:px-5 py-2 rounded-full font-semibold transition-all text-[11px] sm:text-base whitespace-nowrap shadow-sm">
-                        Sou Profissional
-                    </a>
-
-                    <button id="theme-toggle" class="p-1.5 sm:p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                        <span class="material-symbols-outlined block dark:hidden text-[20px] sm:text-[24px]">dark_mode</span>
-                        <span class="material-symbols-outlined hidden dark:block text-[20px] sm:text-[24px]">light_mode</span>
-                    </button>
+    <nav class="sticky top-0 w-full z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 h-16 sm:h-20 flex justify-between items-center">
+            
+            <a href="/" class="flex items-center gap-3">
+                <div class="p-1 bg-white rounded-xl shadow-sm border border-slate-100">
+                    <img alt="Logo" class="h-10 w-10 rounded-lg object-cover" src="{{ url_for('static', filename='img.jpg') }}">
                 </div>
+                <div class="leading-none">
+                    <span class="block font-display font-black text-primary text-lg uppercase tracking-tighter">Vizinhança</span>
+                    <span class="block font-display font-bold text-secondary text-sm uppercase tracking-[0.2em]">Cuidadora</span>
+                </div>
+            </a>
+
+            <div class="flex items-center gap-4">
+                <a href="/buscar" class="hidden md:flex items-center gap-1 text-slate-600 dark:text-slate-300 font-bold hover:text-primary transition">
+                    <span class="material-icons-round">search</span> Encontrar Ajuda
+                </a>
+                <a href="/cadastro" class="bg-primary hover:bg-primary-dark text-white px-5 py-2.5 rounded-2xl font-bold transition-all shadow-lg shadow-primary/20 text-sm">
+                    Quero Trabalhar
+                </a>
+                <button id="theme-toggle" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 transition-colors">
+                    <span class="material-icons-round block dark:hidden">dark_mode</span>
+                    <span class="material-icons-round hidden dark:block">light_mode</span>
+                </button>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <main class="flex-grow">
-        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
-                <div class="space-y-8">
-                    <h1 class="font-display text-4xl md:text-6xl font-extrabold leading-tight text-gray-900 dark:text-white">
-                        Cuidado que fica no <span class="text-primary">bairro.</span>
+    <main>
+        <section class="relative max-w-7xl mx-auto px-4 py-16 md:py-28 overflow-hidden">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="z-10">
+                    <span class="inline-block px-4 py-1.5 bg-community/10 text-community font-bold text-xs uppercase tracking-widest rounded-full mb-6 border border-community/20">
+                        📍 Criado por e para moradores
+                    </span>
+                    <h1 class="font-display text-5xl md:text-7xl font-extrabold leading-[1.1] text-slate-900 dark:text-white mb-8">
+                        Saúde de confiança na porta da <span class="text-primary underline decoration-secondary/30">sua casa.</span>
                     </h1>
-                    <p class="text-lg text-gray-600 dark:text-gray-300 max-w-lg">
-                        Conectamos profissionais de saúde qualificados da sua comunidade para cuidados humanizados.
-                    </p>
-                    <div class="bg-surface-light dark:bg-surface-dark p-2 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 flex gap-2 max-w-md">
-                        <input class="flex-grow p-3 bg-transparent border-none focus:ring-0" placeholder="Qual serviço você precisa?" type="text">
-                        <button class="bg-secondary hover:bg-secondary-dark text-white px-6 py-3 rounded-xl font-semibold transition-all">
+                    
+                    <form action="/buscar" method="GET" class="bg-white dark:bg-slate-900 p-2 rounded-[2rem] shadow-2xl border border-slate-100 dark:border-slate-800 flex flex-col md:flex-row gap-2 max-w-2xl">
+                        <div class="flex-grow flex items-center px-4 gap-2">
+                            <span class="material-icons-round text-slate-400">medical_services</span>
+                            <input name="q" class="w-full py-4 bg-transparent border-none focus:ring-0 text-slate-700 dark:text-white placeholder:text-slate-400" placeholder="Ex: Fisioterapeuta, Curativo..." type="text">
+                        </div>
+                        <div class="hidden md:block w-px h-8 bg-slate-200 self-center"></div>
+                        <div class="flex-grow flex items-center px-4 gap-2">
+                            <span class="material-icons-round text-slate-400">location_on</span>
+                            <input name="bairro" class="w-full py-4 bg-transparent border-none focus:ring-0 text-slate-700 dark:text-white placeholder:text-slate-400" placeholder="Seu bairro" type="text">
+                        </div>
+                        <button class="bg-secondary hover:bg-secondary-dark text-white px-10 py-4 rounded-[1.5rem] font-bold transition-all shadow-lg shadow-secondary/20 active:scale-95">
                             Buscar
                         </button>
-                    </div>
+                    </form>
+                    <p class="mt-6 text-slate-500 dark:text-slate-400 flex items-center gap-2 text-sm">
+                        <span class="material-icons-round text-emerald-500">verified</span> 
+                        Todos os profissionais são validados pela associação de moradores.
+                    </p>
                 </div>
 
-                <div class="relative">
-                    <div class="rounded-[2rem] overflow-hidden shadow-2xl border-8 border-surface-light dark:border-surface-dark bg-gray-200">
-                        <img alt="Cuidado" class="w-full h-[400px] object-cover" src="{{ url_for('static', filename='img2.jpg') }}">
+                <div class="relative group">
+                    <div class="absolute -inset-4 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-[3rem] blur-2xl group-hover:opacity-75 transition duration-1000"></div>
+                    <div class="relative rounded-[2.5rem] overflow-hidden shadow-2xl border-[12px] border-white dark:border-slate-800">
+                        <img alt="Atendimento humanizado na comunidade" class="w-full h-[500px] object-cover hover:scale-105 transition duration-700" src="{{ url_for('static', filename='img2.jpg') }}">
+                        <div class="absolute bottom-6 left-6 right-6 bg-white/90 dark:bg-slate-900/90 backdrop-blur p-6 rounded-2xl shadow-xl">
+                            <div class="flex items-center gap-4">
+                                <div class="flex -space-x-3">
+                                    <div class="w-10 h-10 rounded-full bg-primary border-2 border-white"></div>
+                                    <div class="w-10 h-10 rounded-full bg-secondary border-2 border-white"></div>
+                                    <div class="w-10 h-10 rounded-full bg-community border-2 border-white"></div>
+                                </div>
+                                <p class="text-sm font-bold text-slate-800 dark:text-white">+80 Profissionais ativos hoje</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="admin-panel" class="bg-gray-50 dark:bg-gray-900/30 py-16">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="mb-12">
-                    <h2 class="text-3xl font-display font-bold flex items-center gap-3">
-                        <span class="material-symbols-outlined text-primary text-4xl">dashboard</span>
-                        Painel Administrativo
-                    </h2>
+        <section class="py-20 bg-primary text-white">
+            <div class="max-w-7xl mx-auto px-4 text-center">
+                <h2 class="text-3xl font-display font-bold mb-12">Cuidando de quem cuida</h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="p-8 bg-white/10 rounded-3xl backdrop-blur border border-white/10">
+                        <span class="material-icons-round text-5xl mb-4 text-secondary">volunteer_activism</span>
+                        <h3 class="text-xl font-bold mb-2">Fundo Social</h3>
+                        <p class="text-primary-light/80 text-sm">15% de cada serviço é guardado para melhorias na saúde do nosso próprio bairro.</p>
+                    </div>
+                    <div class="p-8 bg-white/10 rounded-3xl backdrop-blur border border-white/10">
+                        <span class="material-icons-round text-5xl mb-4 text-secondary">local_library</span>
+                        <h3 class="text-xl font-bold mb-2">Cursos Gratuitos</h3>
+                        <p class="text-primary-light/80 text-sm">Usamos o fundo para treinar novos cuidadores aqui na comunidade.</p>
+                    </div>
+                    <div class="p-8 bg-white/10 rounded-3xl backdrop-blur border border-white/10">
+                        <span class="material-icons-round text-5xl mb-4 text-secondary">health_and_safety</span>
+                        <h3 class="text-xl font-bold mb-2">Equipamentos</h3>
+                        <p class="text-primary-light/80 text-sm">Em breve: Aluguel social de cadeiras de rodas e muletas para moradores.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="admin-panel" class="py-20">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+                    <div>
+                        <h2 class="text-4xl font-display font-black text-slate-900 dark:text-white">Gestão Comunitária</h2>
+                        <p class="text-slate-500">Acompanhamento da nossa rede de cuidados.</p>
+                    </div>
+                    <a href="/admin" class="flex items-center gap-2 text-primary font-bold hover:underline">
+                        Acessar painel completo <span class="material-icons-round">arrow_forward</span>
+                    </a>
                 </div>
 
                 <div class="grid lg:grid-cols-3 gap-8">
-                    <div class="bg-surface-light dark:bg-surface-dark p-8 rounded-3xl shadow-sm border border-gray-200 dark:border-gray-800">
-                        <h3 class="font-bold text-xl mb-6">Rede Ativa</h3>
-                        <div class="space-y-4">
-                            <div class="flex justify-between py-3 border-b dark:border-gray-800">
-                                <span class="text-gray-500">Profissionais</span>
-                                <span class="font-bold text-primary">84</span>
+                    <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800">
+                        <div class="flex items-center gap-4 mb-8">
+                            <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
+                                <span class="material-icons-round">groups</span>
                             </div>
-                            <div class="flex justify-between py-3">
-                                <span class="text-gray-500">Pendentes</span>
-                                <span class="font-bold text-secondary">5</span>
+                            <h3 class="font-bold text-xl">Nossa Rede</h3>
+                        </div>
+                        <div class="space-y-6">
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-500 font-medium">Trabalhando hoje</span>
+                                <span class="px-4 py-1 bg-emerald-100 text-emerald-700 rounded-full font-black text-sm">84 Ativos</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-500 font-medium">Novos vizinhos na fila</span>
+                                <span class="px-4 py-1 bg-secondary/10 text-secondary rounded-full font-black text-sm">5 Pendentes</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="lg:col-span-2 bg-surface-light dark:bg-surface-dark p-8 rounded-3xl shadow-sm border border-gray-200 dark:border-gray-800">
-                        <h3 class="font-bold text-xl mb-6">Solicitações Recentes</h3>
-                        <div class="bg-gray-50 dark:bg-gray-900/50 p-6 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-4">
-                            <p class="text-gray-700 dark:text-gray-300">5 novos perfis aguardam validação de documentos.</p>
-                            <button class="bg-primary text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-primary-dark transition-all">Analisar</button>
+                    <div class="lg:col-span-2 bg-slate-900 rounded-[2.5rem] p-8 text-white relative overflow-hidden shadow-2xl">
+                        <div class="relative z-10 flex flex-col h-full justify-between">
+                            <div>
+                                <h3 class="text-2xl font-bold mb-2">Segurança da Vizinhança</h3>
+                                <p class="text-slate-400 max-w-md">Há profissionais aguardando a conferência de documentos para começar a atender no bairro.</p>
+                            </div>
+                            <div class="mt-8 flex items-center gap-4">
+                                <button class="bg-white text-slate-900 px-8 py-3 rounded-2xl font-bold hover:bg-slate-100 transition shadow-lg">
+                                    Conferir Documentos
+                                </button>
+                                <span class="text-xs text-slate-500 font-mono">Última entrada: Há 2 horas</span>
+                            </div>
                         </div>
+                        <span class="material-icons-round absolute -right-8 -bottom-8 text-[15rem] text-white/5 rotate-12">fact_check</span>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="border-t border-gray-200 dark:border-gray-800 py-10 text-center">
-        <p class="text-sm text-gray-500">© 2026 Vizinhança Cuidadora.</p>
+    <footer class="bg-slate-50 dark:bg-slate-900 py-12 border-t border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="font-display font-bold text-primary uppercase tracking-widest text-xs mb-4">Vizinhança Cuidadora</p>
+            <p class="text-sm text-slate-500 mb-8">Tecnologia social para um bairro mais forte e saudável.</p>
+            <div class="flex justify-center gap-6 text-slate-400">
+                <a href="#" class="hover:text-primary transition">Termos de Uso</a>
+                <a href="#" class="hover:text-primary transition">Privacidade</a>
+                <a href="/contato" class="hover:text-primary transition">Suporte Local</a>
+            </div>
+        </div>
     </footer>
 
     <script>
         const themeToggle = document.getElementById('theme-toggle');
-
         function toggleTheme() {
             document.documentElement.classList.toggle('dark');
             localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
         }
-
         if(themeToggle) themeToggle.addEventListener('click', toggleTheme);
-
         if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         }
