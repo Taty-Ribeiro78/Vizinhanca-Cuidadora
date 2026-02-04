@@ -3,16 +3,16 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Cadastro Profissional | Vizinhança Cuidadora</title>
+    <title>Cadastro do Cuidador | Vizinhança Cuidadora</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: { primary: "#0e6479", secondary: "#ef711b", "accent-teal": "#1ab1b8", "background-light": "#fff9f2" },
+                    colors: { primary: "#0e6479", secondary: "#ef711b", "accent-teal": "#1ab1b8", "background-light": "#fffcf2" },
                     fontFamily: { sans: ["Nunito", "sans-serif"] },
                 }
             }
@@ -20,115 +20,170 @@
     </script>
     <style>
         .sunburst-bg { background-image: radial-gradient(circle at 50% -20%, #ffde96 0%, transparent 70%); position: fixed; inset: 0; z-index: -1; opacity: 0.3; }
-        .glass-panel { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .glass-panel { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5); }
+        [x-cloak] { display: none !important; }
     </style>
 </head>
 <body class="bg-background-light text-slate-800" x-data="{ step: 1 }">
     <div class="sunburst-bg"></div>
     
-   <nav class="p-6 flex justify-between items-center max-w-6xl mx-auto">
-    <div class="flex items-center gap-3">
-        <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center overflow-hidden shadow-sm border border-slate-100">
-            <img src="{{ url_for('static', filename='img.jpg') }}" alt="Logo Vizinhança Cuidadora" class="w-full h-full object-cover">
+    <nav class="p-6 flex justify-between items-center max-w-6xl mx-auto">
+        <div class="flex items-center gap-3">
+            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center overflow-hidden shadow-sm border border-slate-100">
+                <img src="{{ url_for('static', filename='img.jpg') }}" alt="Logo" class="w-full h-full object-cover">
+            </div>
+            <div class="flex flex-col">
+                <span class="text-xl font-black text-primary leading-none uppercase tracking-tighter">vizinhança</span>
+                <span class="text-sm font-bold text-secondary leading-none uppercase tracking-widest">cuidadora</span>
+            </div>
         </div>
-        <span class="text-2xl font-extrabold text-primary tracking-tight">vizinhança cuidadora</span>
-    </div>
-    <a href="/buscar" class="text-primary font-bold hover:underline">Já sou cadastrado</a>
-</nav>
+        <a href="/" class="text-primary font-bold hover:underline flex items-center gap-1">
+            <span class="material-icons-round text-sm">arrow_back</span> Voltar para o início
+        </a>
+    </nav>
 
-    <main class="max-w-4xl mx-auto px-6 py-8">
+    <main class="max-w-3xl mx-auto px-6 py-8">
         <header class="mb-12 text-center">
-            <h1 class="text-4xl font-extrabold text-primary mb-2">Seja bem-vindo(a), profissional!</h1>
-            <p class="text-slate-600 text-lg">Sua jornada para transformar a comunidade começa aqui.</p>
+            <h1 class="text-4xl font-black text-primary mb-3">Sua comunidade precisa do seu talento.</h1>
+            <p class="text-slate-600 text-lg">Faça seu cadastro para começar a atender vizinhos com segurança.</p>
         </header>
 
-        <div class="relative mb-16 px-10">
+        <div class="relative mb-16 max-w-md mx-auto">
             <div class="absolute top-1/2 left-0 w-full h-1 bg-gray-200 -translate-y-1/2 rounded-full"></div>
             <div :style="`width: ${(step - 1) * 50}%`" class="absolute top-1/2 left-0 h-1 bg-secondary -translate-y-1/2 rounded-full transition-all duration-500"></div>
             <div class="relative flex justify-between items-center">
                 <template x-for="i in [1, 2, 3]">
-                    <div class="w-12 h-12 flex items-center justify-center rounded-full border-4 border-white shadow-lg transition-all"
-                         :class="step >= i ? 'bg-secondary text-white' : 'bg-gray-300 text-gray-500'">
-                        <span class="material-icons" x-text="i == 1 ? 'person' : (i == 2 ? 'verified_user' : 'account_balance_wallet')"></span>
+                    <div class="flex flex-col items-center">
+                        <div class="w-10 h-10 flex items-center justify-center rounded-full border-4 border-background-light shadow-md transition-all"
+                             :class="step >= i ? 'bg-secondary text-white scale-110' : 'bg-gray-300 text-gray-500'">
+                            <span class="material-icons-round text-lg" x-text="i == 1 ? 'person' : (i == 2 ? 'workspace_premium' : 'account_balance_wallet')"></span>
+                        </div>
                     </div>
                 </template>
             </div>
         </div>
 
-        <form action="/enviar_cadastro" method="POST" enctype="multipart/form-data" class="glass-panel p-8 md:p-12 rounded-3xl shadow-xl">
+        <form action="/enviar_cadastro" method="POST" enctype="multipart/form-data" class="glass-panel p-8 md:p-12 rounded-[2.5rem] shadow-2xl shadow-primary/5">
             
-            <div x-show="step === 1" class="space-y-6">
-                <h2 class="text-2xl font-bold text-primary mb-6 flex items-center gap-2">
-                    <span class="material-icons text-secondary">badge</span> Informações Pessoais
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <label class="font-bold text-slate-700">Nome Completo</label>
-                        <input type="text" name="nome" required class="w-full px-5 py-4 rounded-2xl border-2 border-gray-100 focus:border-accent-teal focus:ring-0 outline-none transition-all" placeholder="Como deseja ser chamado(a)">
+            <div x-show="step === 1" x-transition.opacity>
+                <div class="mb-8">
+                    <h2 class="text-2xl font-black text-primary flex items-center gap-2">
+                        <span class="material-icons-round text-secondary">face</span> Conte sobre você
+                    </h2>
+                    <p class="text-slate-500 text-sm">Esses dados ajudam o vizinho a confiar no seu trabalho.</p>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="font-bold text-slate-700 text-sm ml-1">Nome Completo</label>
+                            <input type="text" name="nome" required class="w-full px-5 py-4 rounded-2xl border-2 border-gray-100 focus:border-accent-teal focus:ring-0 transition-all placeholder:text-slate-300" placeholder="Como quer ser chamado">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="font-bold text-slate-700 text-sm ml-1">Em qual bairro você atua?</label>
+                            <input type="text" name="localidade" required class="w-full px-5 py-4 rounded-2xl border-2 border-gray-100 focus:border-accent-teal focus:ring-0 transition-all placeholder:text-slate-300" placeholder="Ex: Morro do Papagaio">
+                        </div>
                     </div>
+                    
                     <div class="space-y-2">
-                        <label class="font-bold text-slate-700">Localidade (Bairro)</label>
-                        <input type="text" name="localidade" required class="w-full px-5 py-4 rounded-2xl border-2 border-gray-100 focus:border-accent-teal focus:ring-0 outline-none transition-all" placeholder="Ex: Morro do Papagaio">
+                        <label class="font-bold text-slate-700 text-sm ml-1">Fale um pouco da sua experiência (Bio)</label>
+                        <textarea name="bio" rows="3" class="w-full px-5 py-4 rounded-2xl border-2 border-gray-100 focus:border-accent-teal focus:ring-0 transition-all" placeholder="Ex: Sou enfermeira há 5 anos e amo cuidar de pessoas..."></textarea>
                     </div>
                 </div>
-                <div class="flex justify-end pt-8">
-                    <button type="button" @click="step = 2" class="bg-primary hover:bg-opacity-90 text-white font-bold py-4 px-10 rounded-2xl text-lg flex items-center gap-2 shadow-lg">
-                        Continuar <span class="material-icons">arrow_forward</span>
+
+                <div class="flex justify-end pt-10">
+                    <button type="button" @click="step = 2" class="bg-primary hover:scale-105 text-white font-black py-4 px-10 rounded-2xl flex items-center gap-2 shadow-xl shadow-primary/20 transition-all">
+                        Próximo Passo <span class="material-icons-round">east</span>
                     </button>
                 </div>
             </div>
 
-            <div x-show="step === 2" class="space-y-6" x-cloak>
-                <h2 class="text-2xl font-bold text-primary mb-6 flex items-center gap-2">
-                    <span class="material-icons text-secondary">school</span> Credenciais Profissionais
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <label class="font-bold text-slate-700">Especialidade Principal</label>
-                        <input type="text" name="especialidade" required class="w-full px-5 py-4 rounded-2xl border-2 border-gray-100 focus:border-accent-teal focus:ring-0 outline-none transition-all" placeholder="Ex: Cuidador de Idosos">
+            <div x-show="step === 2" x-transition.opacity x-cloak>
+                <div class="mb-8">
+                    <h2 class="text-2xl font-black text-primary flex items-center gap-2">
+                        <span class="material-icons-round text-secondary">medical_information</span> Sua Especialidade
+                    </h2>
+                    <p class="text-slate-500 text-sm">Sua segurança e a do paciente em primeiro lugar.</p>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="font-bold text-slate-700 text-sm ml-1">O que você faz?</label>
+                            <select name="especialidade" class="w-full px-5 py-4 rounded-2xl border-2 border-gray-100 focus:border-accent-teal focus:ring-0 transition-all">
+                                <option value="cuidador">Cuidador(a) de Idosos</option>
+                                <option value="enfermeiro">Enfermeiro(a)</option>
+                                <option value="fisioterapeuta">Fisioterapeuta</option>
+                                <option value="outros">Outros</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="font-bold text-slate-700 text-sm ml-1">Preço médio do seu serviço (R$)</label>
+                            <input type="number" name="valor_servico" required class="w-full px-5 py-4 rounded-2xl border-2 border-gray-100 focus:border-accent-teal focus:ring-0 transition-all" placeholder="Ex: 80.00">
+                        </div>
                     </div>
-                    <div class="space-y-2">
-                        <label class="font-bold text-slate-700">Valor/Hora (R$)</label>
-                        <input type="number" step="0.01" name="valor_servico" required class="w-full px-5 py-4 rounded-2xl border-2 border-gray-100 focus:border-accent-teal focus:ring-0 outline-none transition-all" placeholder="0.00">
+
+                    <div class="p-6 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 hover:border-accent-teal transition-colors">
+                        <label class="font-bold text-slate-700 text-sm block mb-4">Envie seu Certificado ou RG (Foto ou PDF)</label>
+                        <input type="file" name="certificado" required class="w-full text-sm text-slate-500 file:mr-4 file:py-3 file:px-6 file:rounded-full file:border-0 file:bg-primary file:text-white file:font-bold hover:file:bg-primary-dark cursor-pointer">
                     </div>
                 </div>
-                <div class="space-y-4">
-                    <label class="font-bold text-slate-700">Certificado ou Habilitação (PDF/JPG)</label>
-                    <input type="file" name="certificado" required class="w-full text-sm text-slate-500 file:mr-4 file:py-3 file:px-6 file:rounded-full file:border-0 file:bg-primary/10 file:text-primary hover:file:bg-primary/20">
-                </div>
-                <div class="flex justify-between pt-8">
-                    <button type="button" @click="step = 1" class="text-primary font-bold py-4 px-8 rounded-2xl flex items-center gap-2">
-                        <span class="material-icons">arrow_back</span> Voltar
+
+                <div class="flex justify-between pt-10">
+                    <button type="button" @click="step = 1" class="text-slate-400 font-bold hover:text-primary transition-all flex items-center gap-1">
+                        <span class="material-icons-round">west</span> Voltar
                     </button>
-                    <button type="button" @click="step = 3" class="bg-primary hover:bg-opacity-90 text-white font-bold py-4 px-10 rounded-2xl text-lg flex items-center gap-2 shadow-lg">
-                        Avançar <span class="material-icons">check_circle</span>
+                    <button type="button" @click="step = 3" class="bg-primary hover:scale-105 text-white font-black py-4 px-10 rounded-2xl flex items-center gap-2 shadow-xl shadow-primary/20 transition-all">
+                        Tudo certo <span class="material-icons-round">east</span>
                     </button>
                 </div>
             </div>
 
-            <div x-show="step === 3" class="space-y-6" x-cloak>
-                <h2 class="text-2xl font-bold text-primary mb-6 flex items-center gap-2">
-                    <span class="material-icons text-secondary">security</span> Identidade na Blockchain
-                </h2>
-                <div class="bg-blue-50 p-6 rounded-2xl border border-blue-100 text-blue-800 text-sm">
-                    Utilizamos a rede <strong>Stellar</strong> para garantir a transparência. Sua chave pública será gerada automaticamente pelo administrador após a validação.
+            <div x-show="step === 3" x-transition.opacity x-cloak>
+                <div class="mb-8">
+                    <h2 class="text-2xl font-black text-primary flex items-center gap-2">
+                        <span class="material-icons-round text-secondary">account_balance_wallet</span> Recebimento Seguro
+                    </h2>
+                    <p class="text-slate-500 text-sm">Como garantimos que você receba seu dinheiro.</p>
                 </div>
-                <div class="flex items-start gap-3 p-4 bg-amber-50 rounded-2xl border border-amber-100">
-                    <input type="checkbox" required class="mt-1 rounded text-secondary focus:ring-secondary">
-                    <label class="text-sm text-amber-900">
-                        Eu entendo que meus dados serão auditados pela associação de moradores local para garantir a segurança da vizinhança.
-                    </label>
+
+                <div class="space-y-6">
+                    <div class="bg-primary/5 p-6 rounded-3xl border border-primary/10">
+                        <div class="flex gap-4">
+                            <span class="material-icons-round text-primary text-3xl">verified_user</span>
+                            <div>
+                                <h4 class="font-black text-primary mb-1">Registro Digital Comunitário</h4>
+                                <p class="text-sm text-slate-600 leading-relaxed">
+                                    Para sua segurança, criaremos um <strong>Código de Recebimento Único</strong>. Isso garante que cada serviço prestado seja registrado e pago sem erros, de forma protegida contra fraudes.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 bg-amber-50 rounded-3xl border border-amber-100">
+                        <div class="flex items-start gap-4">
+                            <input type="checkbox" required class="mt-1 w-6 h-6 rounded-lg text-secondary border-amber-200 focus:ring-secondary transition-all">
+                            <p class="text-sm text-amber-900 leading-tight">
+                                Concordo que a <strong>Associação de Moradores</strong> valide meus documentos e que 15% do valor do meu serviço seja destinado ao <strong>Fundo de Saúde do Bairro</strong>.
+                            </p>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex justify-between pt-4">
-                    <button type="button" @click="step = 2" class="text-primary font-bold py-4 px-8 rounded-2xl flex items-center gap-2">
-                        <span class="material-icons">arrow_back</span> Voltar
+
+                <div class="flex justify-between pt-10">
+                    <button type="button" @click="step = 2" class="text-slate-400 font-bold hover:text-primary transition-all flex items-center gap-1">
+                        <span class="material-icons-round">west</span> Voltar
                     </button>
-                        <button type="submit" class="bg-primary hover:bg-opacity-90 text-white font-bold py-4 px-10 rounded-2xl text-lg flex items-center gap-2 shadow-lg">
-                            Finalizar Cadastro <span class="material-icons">send</span>
+                    <button type="submit" class="bg-secondary hover:scale-105 text-white font-black py-4 px-10 rounded-2xl flex items-center gap-2 shadow-xl shadow-secondary/30 transition-all">
+                        Enviar para Aprovação <span class="material-icons-round">auto_awesome</span>
                     </button>
                 </div>
             </div>
         </form>
+        
+        <p class="mt-8 text-center text-slate-400 text-xs">
+            Suas informações são protegidas e usadas apenas para validação comunitária.
+        </p>
     </main>
 </body>
 </html>
