@@ -2,132 +2,96 @@
 <html lang="pt-BR">
 <head>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagamento - Vizinhança Cuidadora</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Finalizar Contratação | Vizinhança Cuidadora</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@400" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
     <script>
-        tailwind.config = { 
-            theme: { 
-                extend: { 
-                    colors: { 
-                        primary: "#0a7489", 
-                        secondary: "#f26522",
-                        success: "#10b981"
-                    },
-                    fontFamily: { 'display': ['Montserrat', 'sans-serif'], 'sans': ['Inter', 'sans-serif'] }
-                } 
-            } 
-        };
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: "#0a7489", secondary: "#f26522" },
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Montserrat', 'sans-serif'] }
+                }
+            }
+        }
     </script>
-    <style>
-        .stellar-gradient { background: linear-gradient(135deg, #4B0082 0%, #0a7489 50%, #f26522 100%); }
-        .animate-fade-in { animation: fadeIn 0.3s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
 </head>
-<body class="bg-slate-100 flex items-center justify-center min-h-screen p-4">
+<body class="bg-slate-50 text-slate-800 font-sans">
 
-    <div class="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl overflow-hidden animate-fade-in">
-        <div class="stellar-gradient p-8 text-white text-center">
-            <span class="material-symbols-outlined text-4xl mb-2">account_balance_wallet</span>
-            <h1 class="font-display text-2xl font-bold mb-1">Resumo do Cuidado</h1>
-            <p class="text-sm opacity-90">Pagamento via Blockchain Stellar</p>
-        </div>
-        
-        <div class="p-8 space-y-6">
-            <div class="flex justify-between items-center pb-4 border-b border-slate-100">
-                <div>
-                    <span class="text-slate-500 text-xs font-bold uppercase block">Profissional</span>
-                    <span class="font-bold text-slate-900">{{ nome if nome else 'Não informado' }}</span>
-                </div>
-                <div class="text-right">
-                    <span class="text-slate-500 text-xs font-bold uppercase block">Serviço</span>
-                    <span class="font-bold text-primary">{{ especialidade if especialidade else 'Cuidado Geral' }}</span>
-                </div>
-            </div>
-
-           <div class="space-y-3 bg-slate-50 p-5 rounded-2xl border border-slate-100">
-    <div class="flex justify-between text-sm">
-        <span class="text-slate-600">Repasse Profissional (80%)</span>
-        <span class="text-emerald-600 font-bold">R$ {{ "%.2f"|format(prof_val|float) if prof_val else "0.00" }}</span>
-    </div>
-    <div class="flex justify-between text-sm">
-        <span class="text-slate-600">Fundo Comunitário (15%)</span>
-        <span class="text-primary font-bold">R$ {{ "%.2f"|format(assoc_val|float) if assoc_val else "0.00" }}</span>
-    </div>
-    <div class="pt-3 mt-3 border-t border-slate-200 flex justify-between items-center">
-        <span class="font-bold text-slate-900">Total a Pagar</span>
-        <span class="text-2xl font-black text-slate-900">R$ {{ "%.2f"|format(total|float) if total else "0.00" }}</span>
-    </div>
-</div>
-
-            <div class="bg-slate-900 p-4 rounded-xl">
-                <p class="text-[10px] text-teal-400 font-bold uppercase mb-2">Chave Pública de Destino (Stellar)</p>
-                <div class="flex items-center gap-2">
-                    <code id="stellar-wallet" class="text-white text-[10px] break-all font-mono block bg-slate-800 p-2 rounded flex-1">
-                        {{ chave if chave else 'CARREGANDO_CHAVE_BLOCKCHAIN...' }}
-                    </code>
-                    <button onclick="copyToClipboard('stellar-wallet')" class="text-slate-400 hover:text-white transition-colors">
-                        <span class="material-symbols-outlined text-sm">content_copy</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="space-y-3">
-                <button id="confirm-button" onclick="processPayment()" 
-                        class="w-full bg-secondary hover:bg-orange-600 text-white font-bold py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 group">
-                    <span id="button-text">Confirmar na Blockchain</span>
-                    <span id="button-icon" class="material-symbols-outlined group-hover:translate-x-1">arrow_forward</span>
-                </button>
-                <a href="/" class="block text-center text-slate-500 hover:text-primary text-sm font-medium">
-                    Cancelar e Voltar
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div id="success-modal" class="fixed inset-0 bg-black/60 flex items-center justify-center p-4 hidden z-50">
-        <div class="bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl animate-fade-in">
-            <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span class="material-symbols-outlined text-4xl font-bold">check</span>
-            </div>
-            <h3 class="text-2xl font-bold text-slate-900 mb-2">Transação Aceita!</h3>
-            <p class="text-slate-600 mb-6 text-sm">O pagamento foi processado e registrado no ledger da Stellar.</p>
-            
-            <a href="/admin/financeiro" class="block w-full bg-primary text-white font-bold py-3 rounded-xl hover:bg-teal-800 transition-colors mb-2">
-                Ver no Fundo Comunitário
+    <nav class="bg-white border-b border-slate-200 py-4 mb-8">
+        <div class="max-w-3xl mx-auto px-4 flex items-center gap-4">
+            <a href="javascript:history.back()" class="p-2 hover:bg-slate-100 rounded-full transition">
+                <span class="material-icons-round text-slate-600">arrow_back</span>
             </a>
-            <button onclick="location.href='/'" class="block w-full text-slate-500 font-medium py-2 text-sm">
-                Voltar ao Início
-            </button>
+            <h1 class="font-display font-bold text-xl text-primary uppercase tracking-tight">Checkout</h1>
         </div>
-    </div>
+    </nav>
 
-    <script>
-        function copyToClipboard(id) {
-            const text = document.getElementById(id).innerText;
-            navigator.clipboard.writeText(text);
-            alert("Chave copiada para a área de transferência!");
-        }
+    <main class="max-w-3xl mx-auto px-4 pb-20">
+        <div class="grid md:grid-cols-5 gap-8">
+            
+            <div class="md:col-span-2 space-y-6">
+                <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-200 text-center">
+                    <div class="w-20 h-20 bg-primary/10 text-primary rounded-3xl flex items-center justify-center text-3xl font-black mx-auto mb-4">
+                        {{ prof.nome[:2]|upper }}
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-900">{{ prof.nome }}</h2>
+                    <p class="text-secondary font-bold text-sm uppercase tracking-wider mb-4">{{ prof.especialidade }}</p>
+                    <div class="flex items-center justify-center gap-1 text-slate-500 text-sm">
+                        <span class="material-icons-round text-sm">place</span> {{ prof.localidade }}
+                    </div>
+                </div>
 
-        function processPayment() {
-            const btn = document.getElementById('confirm-button');
-            const txt = document.getElementById('button-text');
-            const icon = document.getElementById('button-icon');
+                <div class="bg-primary/5 p-6 rounded-[2rem] border border-primary/10">
+                    <p class="text-xs font-bold text-primary uppercase tracking-widest mb-2">Total do Serviço</p>
+                    <p class="text-3xl font-black text-primary">R$ {{ "%.2f"|format(prof.valor_servico|float) }}</p>
+                    <p class="text-[10px] text-slate-500 mt-2 leading-relaxed italic">
+                        * Inclui 15% de contribuição para o fundo social do bairro.
+                    </p>
+                </div>
+            </div>
 
-            btn.disabled = true;
-            btn.classList.add('opacity-50');
-            txt.innerText = "Validando na Rede...";
-            icon.innerText = "sync";
-            icon.classList.add('animate-spin');
+            <div class="md:col-span-3 space-y-6">
+                <div class="bg-white p-8 rounded-[2rem] shadow-xl border border-slate-100">
+                    <h3 class="text-lg font-bold mb-6 flex items-center gap-2">
+                        <span class="material-icons-round text-secondary">security</span>
+                        Escolha como pagar
+                    </h3>
 
-            // Simulação de tempo de resposta da blockchain
-            setTimeout(() => {
-                document.getElementById('success-modal').classList.remove('hidden');
-            }, 2500);
-        }
-    </script>
+                    <div class="space-y-4">
+                        <button class="w-full flex items-center justify-between p-4 rounded-2xl border-2 border-slate-100 hover:border-primary transition-all group">
+                            <div class="flex items-center gap-4">
+                                <span class="material-icons-round text-slate-400 group-hover:text-primary">pix</span>
+                                <span class="font-bold">PIX (Rápido e Seguro)</span>
+                            </div>
+                            <span class="material-icons-round text-slate-300">chevron_right</span>
+                        </button>
+
+                        <button class="w-full flex items-center justify-between p-4 rounded-2xl border-2 border-slate-100 hover:border-primary transition-all group">
+                            <div class="flex items-center gap-4">
+                                <span class="material-icons-round text-slate-400 group-hover:text-primary">credit_card</span>
+                                <span class="font-bold">Cartão de Crédito</span>
+                            </div>
+                            <span class="material-icons-round text-slate-300">chevron_right</span>
+                        </button>
+                        
+                        <div class="pt-4 mt-4 border-t border-slate-100">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-4">Pagamento Digital Local</p>
+                            <a href="{{ url_for('confirmar_pagamento', id=prof.id) }}" class="w-full bg-slate-900 text-white p-5 rounded-3xl flex flex-col items-center gap-2 hover:bg-black transition shadow-lg active:scale-95 no-underline block">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-icons-round text-teal-400">account_balance_wallet</span>
+                                    <span class="font-bold">Pagar com Stellar Wallet</span>
+                                </div>
+                                <span class="text-[9px] font-mono text-slate-400 truncate w-full">Destino: {{ prof.stellar_pubkey }}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-center text-xs text-slate-400">Ao clicar em pagar, você concorda com os termos de segurança da Vizinhança Cuidadora.</p>
+            </div>
+        </div>
+    </main>
 </body>
 </html>

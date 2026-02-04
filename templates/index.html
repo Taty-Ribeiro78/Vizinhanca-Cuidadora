@@ -9,7 +9,9 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
@@ -31,21 +33,26 @@
     </script>
 </head>
 
-<body class="font-sans bg-[#fffcf2] dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-300">
+<body
+    class="font-sans bg-[#fffcf2] dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-300">
 
-    <nav class="sticky top-0 w-full z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+    <nav
+        class="sticky top-0 w-full z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
         <div class="max-w-7xl mx-auto px-4 h-16 sm:h-20 flex justify-between items-center">
             <a href="/" class="flex items-center gap-3">
-                <img alt="Logo" class="h-10 w-10 rounded-lg shadow-sm" src="{{ url_for('static', filename='img.jpg') }}">
+                <img alt="Logo" class="h-10 w-10 rounded-lg shadow-sm"
+                    src="{{ url_for('static', filename='img.jpg') }}">
                 <div class="hidden xs:block leading-none">
-                    <span class="block font-display font-black text-primary text-lg uppercase tracking-tighter">Vizinhança</span>
-                    <span class="block font-display font-bold text-secondary text-sm uppercase tracking-widest">Cuidadora</span>
+                    <span
+                        class="block font-display font-black text-primary text-lg uppercase tracking-tighter">Vizinhança</span>
+                    <span
+                        class="block font-display font-bold text-secondary text-sm uppercase tracking-widest">Cuidadora</span>
                 </div>
             </a>
 
             <div class="flex items-center gap-3">
-                <a href="/buscar" class="text-sm font-bold text-slate-600 hover:text-primary px-3 py-2 transition">Encontrar Ajuda</a>
-                <a href="/cadastro" class="bg-primary hover:bg-primary-dark text-white px-5 py-2.5 rounded-2xl font-bold transition shadow-lg shadow-primary/20 text-xs sm:text-sm">
+                <a href="/cadastro"
+                    class="bg-primary hover:bg-primary-dark text-white px-5 py-2.5 rounded-2xl font-bold transition shadow-lg shadow-primary/20 text-xs sm:text-sm">
                     Quero Trabalhar
                 </a>
                 <button id="theme-toggle" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500">
@@ -59,22 +66,27 @@
     <main>
         <section class="max-w-7xl mx-auto px-4 py-12 md:py-24 grid lg:grid-cols-2 gap-12 items-center">
             <div>
-                <h1 class="font-display text-5xl md:text-7xl font-extrabold leading-tight text-slate-900 dark:text-white mb-6">
+                <h1
+                    class="font-display text-5xl md:text-7xl font-extrabold leading-tight text-slate-900 dark:text-white mb-6">
                     Quem cuida do <span class="text-primary">bairro</span> vive aqui.
                 </h1>
                 <p class="text-lg text-slate-600 dark:text-slate-400 mb-10 max-w-lg">
-                    Encontre enfermeiros, cuidadores e fisioterapeutas que moram perto de você. Atendimento rápido, humano e validado.
+                    Encontre enfermeiros, cuidadores e fisioterapeutas que moram perto de você. Atendimento rápido,
+                    humano e validado.
                 </p>
-                
-                <form action="/buscar" class="flex flex-col sm:flex-row gap-2 p-2 bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl border border-slate-100 dark:border-slate-800">
-                    <input class="flex-grow px-6 py-4 bg-transparent border-none focus:ring-0" placeholder="O que você precisa?" type="text">
-                    <button class="bg-secondary text-white px-8 py-4 rounded-[1.5rem] font-bold hover:scale-105 transition">Buscar agora</button>
+
+                <form action="{{ url_for('buscar') }}" method="GET" class="relative">
+                    <input type="text" name="q" placeholder="O que você precisa?" class="...">
+                    <button type="submit" class="...">
+                        Buscar agora
+                    </button>
                 </form>
             </div>
-            
+
             <div class="grid grid-cols-2 gap-4">
                 <div class="space-y-4">
-                    <div class="h-48 bg-primary/10 rounded-[2rem] flex flex-col items-center justify-center text-primary hover:bg-primary hover:text-white transition cursor-pointer">
+                    <div
+                        class="h-48 bg-primary/10 rounded-[2rem] flex flex-col items-center justify-center text-primary">
                         <span class="material-icons-round text-4xl mb-2">medical_services</span>
                         <span class="font-bold">Enfermagem</span>
                     </div>
@@ -84,9 +96,10 @@
                 </div>
                 <div class="space-y-4 pt-8">
                     <div class="h-64 bg-slate-200 rounded-[2rem] overflow-hidden shadow-xl">
-                         <img src="{{ url_for('static', filename='img3.jpg') }}" class="w-full h-full object-cover">
+                        <img src="{{ url_for('static', filename='img3.jpg') }}" class="w-full h-full object-cover">
                     </div>
-                    <div class="h-48 bg-community/10 rounded-[2rem] flex flex-col items-center justify-center text-community hover:bg-community hover:text-white transition cursor-pointer">
+                    <div
+                        class="h-48 bg-community/10 rounded-[2rem] flex flex-col items-center justify-center text-community">
                         <span class="material-icons-round text-4xl mb-2">elderly</span>
                         <span class="font-bold">Cuidadores</span>
                     </div>
@@ -94,22 +107,73 @@
             </div>
         </section>
 
+        {% if busca_feita %}
+        <section id="resultados" class="max-w-7xl mx-auto px-4 pb-20 scroll-mt-24">
+            <h3 class="text-2xl font-display font-bold mb-8 flex items-center gap-2">
+                <span class="w-8 h-1 bg-secondary rounded-full"></span>
+                Profissionais Disponíveis
+            </h3>
+
+            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {% for pro in profissionais %}
+                <div
+                    class="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-xl transition-all">
+                    <div class="flex justify-between items-start mb-4">
+                        <div
+                            class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary font-bold">
+                            {{ pro.nome[:2]|upper }}
+                        </div>
+                        <span
+                            class="px-3 py-1 bg-emerald-100 text-emerald-600 text-[10px] font-black uppercase rounded-full flex items-center gap-1">
+                            <span class="material-icons-round text-xs">verified</span> Verificado
+                        </span>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 dark:text-white">{{ pro.nome }}</h4>
+                    <p class="text-secondary font-bold text-sm uppercase tracking-wider">{{ pro.especialidade }}</p>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm mt-3 flex items-center gap-1">
+                        <span class="material-icons-round text-sm text-primary">place</span> {{ pro.localidade }}
+                    </p>
+                    <button
+                        class="mt-6 w-full py-3 bg-primary/10 text-primary rounded-2xl font-bold hover:bg-primary hover:text-white transition-all">
+                        Ver Perfil Completo
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% if not profissionais %}
+            <div
+                class="p-16 text-center bg-white dark:bg-slate-900 rounded-[3rem] border-2 border-dashed border-slate-200 dark:border-slate-800">
+                <span class="material-icons-round text-5xl text-slate-300 mb-4">search_off</span>
+                <p class="text-slate-500 dark:text-slate-400 text-lg">Nenhum profissional encontrado para "{{
+                    request.args.get('q', '') }}".</p>
+            </div>
+            {% endif %}
+        </section>
+        {% endif %}
+
         <section class="bg-white dark:bg-slate-900 py-20 border-y border-slate-100 dark:border-slate-800">
             <div class="max-w-7xl mx-auto px-4 text-center">
                 <h2 class="text-3xl font-display font-bold mb-16">Saúde sem complicação</h2>
-                <div class="grid md:grid-cols-3 gap-12 relative">
+                <div class="grid md:grid-cols-3 gap-12">
                     <div class="space-y-4">
-                        <div class="w-16 h-16 bg-primary text-white rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold shadow-lg shadow-primary/30">1</div>
+                        <div
+                            class="w-16 h-16 bg-primary text-white rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold shadow-lg shadow-primary/30">
+                            1</div>
                         <h3 class="font-bold text-xl">Peça pelo site</h3>
                         <p class="text-slate-500 text-sm">Escolha o serviço e veja os profissionais do seu bairro.</p>
                     </div>
                     <div class="space-y-4">
-                        <div class="w-16 h-16 bg-secondary text-white rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold shadow-lg shadow-secondary/30">2</div>
+                        <div
+                            class="w-16 h-16 bg-secondary text-white rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold shadow-lg shadow-secondary/30">
+                            2</div>
                         <h3 class="font-bold text-xl">Atendimento em casa</h3>
                         <p class="text-slate-500 text-sm">O profissional vem até você com toda segurança e carinho.</p>
                     </div>
                     <div class="space-y-4">
-                        <div class="w-16 h-16 bg-community text-white rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold shadow-lg shadow-community/30">3</div>
+                        <div
+                            class="w-16 h-16 bg-community text-white rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold shadow-lg shadow-community/30">
+                            3</div>
                         <h3 class="font-bold text-xl">Ajude o bairro</h3>
                         <p class="text-slate-500 text-sm">Parte do valor volta para o fundo de saúde da comunidade.</p>
                     </div>
@@ -118,26 +182,31 @@
         </section>
 
         <section class="py-20 max-w-7xl mx-auto px-4">
-            <div class="bg-slate-900 rounded-[3rem] p-8 md:p-16 text-white grid md:grid-cols-2 gap-12 items-center overflow-hidden relative">
+            <div
+                class="bg-slate-900 rounded-[3rem] p-8 md:p-16 text-white grid md:grid-cols-2 gap-12 items-center overflow-hidden relative">
                 <div class="z-10">
-                    <h2 class="text-4xl font-display font-black mb-6">Transparência <br><span class="text-community">de vizinho.</span></h2>
-                    <p class="text-slate-400 mb-8">Aqui você vê para onde vai cada centavo da contribuição social (15%). Nosso fundo é auditado pela própria associação.</p>
+                    <h2 class="text-4xl font-display font-black mb-6">Transparência <br><span class="text-community">de
+                            vizinho.</span></h2>
+                    <p class="text-slate-400 mb-8">Aqui você vê para onde vai cada centavo da contribuição social (15%).
+                        Nosso fundo é auditado pela própria associação.</p>
                     <div class="flex gap-4">
                         <div class="bg-white/10 p-4 rounded-2xl">
                             <span class="block text-2xl font-black text-secondary">R$ 4.250</span>
-                            <span class="text-xs text-slate-400 uppercase font-bold tracking-widest">No Fundo Social</span>
+                            <span class="text-xs text-slate-400 uppercase font-bold tracking-widest">No Fundo
+                                Social</span>
                         </div>
                         <div class="bg-white/10 p-4 rounded-2xl">
                             <span class="block text-2xl font-black text-emerald-400">12</span>
-                            <span class="text-xs text-slate-400 uppercase font-bold tracking-widest">Kits Comprados</span>
+                            <span class="text-xs text-slate-400 uppercase font-bold tracking-widest">Kits
+                                Comprados</span>
                         </div>
                     </div>
-                    <a href="/transparencia" class="inline-block mt-10 font-bold text-sm border-b-2 border-community pb-1 hover:text-community transition">Ver extrato do bairro →</a>
+                    <a href="/transparencia"
+                        class="inline-block mt-10 font-bold text-sm border-b-2 border-community pb-1 hover:text-community transition">Ver
+                        extrato do bairro →</a>
                 </div>
-                <div class="relative z-10 hidden md:block">
-                     
-                </div>
-                <span class="material-icons-round absolute -right-20 -bottom-20 text-[20rem] text-white/5">security</span>
+                <span
+                    class="material-icons-round absolute -right-20 -bottom-20 text-[20rem] text-white/5">security</span>
             </div>
         </section>
 
@@ -145,7 +214,8 @@
             <div class="max-w-2xl mx-auto px-4">
                 <span class="material-icons-round text-secondary text-5xl mb-6">format_quote</span>
                 <p class="text-2xl font-medium italic text-slate-700 dark:text-slate-300 mb-6">
-                    "Foi um alívio encontrar a Dona Maria para cuidar do meu pai. Ela mora a duas ruas da gente e o carinho é outro nível."
+                    "Foi um alívio encontrar a Dona Maria para cuidar do meu pai. Ela mora a duas ruas da gente e o
+                    carinho é outro nível."
                 </p>
                 <p class="font-bold text-primary">— Joana, moradora do Bairro</p>
             </div>
@@ -155,22 +225,16 @@
     <footer class="bg-slate-50 dark:bg-slate-900 py-16 border-t border-slate-200 dark:border-slate-800">
         <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-4 gap-12">
             <div class="col-span-2">
-                <span class="font-display font-black text-primary text-xl uppercase tracking-tighter">Vizinhança Cuidadora</span>
-                <p class="mt-4 text-slate-500 max-w-xs text-sm leading-relaxed">Transformando a economia do bairro através do cuidado e da tecnologia social.</p>
+                <span class="font-display font-black text-primary text-xl uppercase tracking-tighter">Vizinhança
+                    Cuidadora</span>
+                <p class="mt-4 text-slate-500 max-w-xs text-sm leading-relaxed">Transformando a economia do bairro
+                    através do cuidado e da tecnologia social.</p>
             </div>
             <div>
-                <h4 class="font-bold mb-4">Serviços</h4>
-                <ul class="text-sm text-slate-500 space-y-2">
-                    <li><a href="#" class="hover:text-primary transition">Curativos</a></li>
-                    <li><a href="#" class="hover:text-primary transition">Acompanhamento</a></li>
-                    <li><a href="#" class="hover:text-primary transition">Fisioterapia</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-bold mb-4">Associação</h4>
+                <h4 class="font-bold mb-4 dark:text-white">Associação</h4>
                 <ul class="text-sm text-slate-500 space-y-2">
                     <li><a href="/admin" class="hover:text-primary transition">Painel Admin</a></li>
-                    <li><a href="#" class="hover:text-primary transition">Como Ajudar</a></li>
+                    <li><a href="/cadastro" class="hover:text-primary transition">Trabalhe Conosco</a></li>
                     <li><a href="/contato" class="hover:text-primary transition">Contato</a></li>
                 </ul>
             </div>
@@ -179,11 +243,17 @@
 
     <script>
         const themeToggle = document.getElementById('theme-toggle');
-        function toggleTheme() {
-            document.documentElement.classList.toggle('dark');
-            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        const htmlElement = document.documentElement;
+
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlElement.classList.add('dark');
         }
-        if(themeToggle) themeToggle.addEventListener('click', toggleTheme);
+
+        themeToggle.addEventListener('click', () => {
+            htmlElement.classList.toggle('dark');
+            localStorage.setItem('theme', htmlElement.classList.contains('dark') ? 'dark' : 'light');
+        });
     </script>
 </body>
+
 </html>

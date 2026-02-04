@@ -7,9 +7,13 @@ app = Flask(__name__)
 app.secret_key = 'vizinhança_cuidadora_key_2026'
 
 # --- CONFIGURAÇÕES ---
-UPLOAD_FOLDER = 'certificados'
+UPLOAD_FOLDER = 'static/certificados'
+ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
+
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def conectar_bd():
     conn = sqlite3.connect('vizinhanca.db')
@@ -17,22 +21,21 @@ def conectar_bd():
     return conn
 
 def configurar_tabela():
-    conn = conectar_bd()
-    cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS profissionais (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nome TEXT NOT NULL UNIQUE,
-            especialidade TEXT NOT NULL,
-            valor_servico REAL NOT NULL,
-            localidade TEXT NOT NULL,
-            stellar_pubkey TEXT,
-            validado INTEGER DEFAULT 0,
-            certificado_path TEXT
-        )
-    """)
-    conn.commit()
-    conn.close()
+    with conectar_bd() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS profissionais (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome TEXT NOT NULL UNIQUE,
+                especialidade TEXT NOT NULL,
+                valor_servico REAL NOT NULL,
+                localidade TEXT NOT NULL,
+                stellar_pubkey TEXT,
+                validado INTEGER DEFAULT 0,
+                certificado_path TEXT
+            )
+        """)
+        conn.commit()
 
 configurar_tabela()
 
@@ -42,81 +45,89 @@ configurar_tabela()
 def home():
     return render_template('index.html')
 
+@app.route('/buscar')
+def buscar():
+    termo = request.args.get('q', '').lower()
+    with conectar_bd() as conn:
+        cursor = conn.cursor()
+        if termo:
+            query = "SELECT * FROM profissionais WHERE (nome LIKE ? OR especialidade LIKE ?) AND validado = 1"
+            resultados = cursor.execute(query, (f'%{termo}%', f'%{termo}%')).fetchall()
+        else:
+            resultados = cursor.execute("SELECT * FROM profissionais WHERE validado = 1").fetchall()
+    return render_template('buscar.html', profissionais=resultados, busca=termo)
+
 @app.route('/cadastro')
-def cadastro():
+def exibir_cadastro():
+    """Exibe o formulário de cadastro (O rosto da página)"""
     return render_template('cadastro.html')
 
-# ESTA É A ROTA QUE RECEBE OS DADOS DO FORMULÁRIO
 @app.route('/enviar_cadastro', methods=['POST'])
 def enviar_cadastro():
+    """Processa os dados do formulário (O motor)"""
     nome = request.form.get('nome')
-    especialidade = request.form.get('especialidade')
     localidade = request.form.get('localidade')
+    especialidade = request.form.get('especialidade')
+    valor = request.form.get('valor') 
     
-    # Ajuste para pegar o campo correto do seu HTML
-    valor_str = request.form.get('valor') or "0"
-    valor = float(valor_str.replace(',', '.'))
-
-    # O campo no seu HTML de cadastro se chama 'doc', não 'certificado'
-    arquivo = request.files.get('doc')
-    caminho_certificado = ""
-    if arquivo and arquivo.filename != '':
-        nome_arquivo = secure_filename(f"{nome}_{arquivo.filename}")
-        caminho_certificado = os.path.join(UPLOAD_FOLDER, nome_arquivo)
-        arquivo.save(caminho_certificado)
+    # Tratamento do arquivo de certificado
+    file = request.files.get('doc')
+    filename = None
+    if file and file.filename != '':
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
     try:
-        with conectar_bd() as conexao:
-            cursor = conexao.cursor()
-            # Salva com validado = 0 para aparecer na curadoria
+        with conectar_bd() as conn:
+            cursor = conn.cursor()
             cursor.execute("""
-                INSERT INTO profissionais (nome, especialidade, valor_servico, localidade, validado, certificado_path)
-                VALUES (?, ?, ?, ?, 0, ?)
-            """, (nome, especialidade, valor, localidade, caminho_certificado))
-            conexao.commit()
+                INSERT INTO profissionais (nome, especialidade, valor_servico, localidade, stellar_pubkey, certificado_path)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, (nome, especialidade, valor, localidade, 'CHAVE_STELLAR_AUTO', filename))
+            conn.commit()
         
-        flash("Cadastro enviado com sucesso!", "success")
-        return redirect(url_for('home')) # Ou uma página de sucesso
+        return redirect(url_for('confirmacao_cadastro_sucesso'))
+    
     except Exception as e:
-        flash(f"Erro ao cadastrar: {str(e)}", "danger")
-        return redirect(url_for('cadastro'))
+        print(f"Erro ao salvar: {e}")
+        flash("Erro ao realizar cadastro. Verifique se o nome já existe.", "danger")
+        return redirect(url_for('exibir_cadastro'))
 
-@app.route('/admin')
-def admin_geral():
-    with conectar_bd() as conexao:
-        cursor = conexao.cursor()
-        # Pega quem tem validado = 0 (Pendente)
-        cursor.execute("SELECT * FROM profissionais WHERE validado = 0")
-        pendentes = cursor.fetchall()
+@app.route('/cadastro_sucesso')
+def confirmacao_cadastro_sucesso():
+    """Exibe a página de sucesso após o cadastro"""
+    return render_template('confirmacao_cadastro.html')
+
+@app.route('/pagamento/<int:id>')
+def pagamento(id):
+    with conectar_bd() as conn:
+        cursor = conn.cursor()
+        prof = cursor.execute("SELECT * FROM profissionais WHERE id = ?", (id,)).fetchone()
+    
+    if not prof:
+        flash("Profissional não encontrado!", "danger")
+        return redirect(url_for('buscar'))
         
-        # Agendamentos fictícios para não quebrar o dashboard
-        agendamentos_ficticios = [
-            {'iniciais': 'MA', 'paciente': 'Maria Andrade', 'endereco': 'Rua Flores, 123', 'horario': '09:00'},
-            {'iniciais': 'JS', 'paciente': 'João Silva', 'endereco': 'Av. Central, 450', 'horario': '14:30'}
-        ]
+    return render_template('pagamento.html', prof=prof)
 
-    return render_template('admin.html', 
-                           profissionais=pendentes, 
-                           agendamentos=agendamentos_ficticios)
+@app.route('/confirmar_pagamento/<int:id>')
+def confirmar_pagamento(id):
+    with conectar_bd() as conn:
+        cursor = conn.cursor()
+        prof = cursor.execute("SELECT * FROM profissionais WHERE id = ?", (id,)).fetchone()
+    
+    if not prof:
+        return "Profissional não encontrado", 404
 
-@app.route('/validar/<int:id>')
-def validar_profissional(id):
-    with conectar_bd() as conexao:
-        cursor = conexao.cursor()
-        cursor.execute("UPDATE profissionais SET validado = 1 WHERE id = ?", (id,))
-        conexao.commit()
-    flash("Profissional aprovado!", "success")
-    return redirect(url_for('admin_geral'))
-
-@app.route('/criar_carteira/<int:id>')
-def criar_carteira(id):
-    chave_fake = f"GB{id}STELLAR_FAKE_KEY"
-    with conectar_bd() as conexao:
-        cursor = conexao.cursor()
-        cursor.execute("UPDATE profissionais SET stellar_pubkey = ? WHERE id = ?", (chave_fake, id))
-        conexao.commit()
-    flash("Carteira ativada!", "success")
-    return redirect(url_for('admin_geral'))
+    valor_total = float(prof['valor_servico'])
+    
+    return render_template('blockchain_confirm.html', 
+                           nome=prof['nome'],
+                           especialidade=prof['especialidade'],
+                           prof_val=valor_total * 0.80, 
+                           assoc_val=valor_total * 0.15,
+                           total=valor_total,
+                           chave=prof['stellar_pubkey'])
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=True)

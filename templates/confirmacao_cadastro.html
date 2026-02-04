@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro Confirmado | Vizinhança Cuidadora</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&family=Inter:wght@400;600&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#0e6479",
+                        secondary: "#ef711b",
+                        "dark-button": "#0a5d71"
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-slate-50 flex items-center justify-center min-h-screen font-sans p-6">
+    <div class="max-w-md w-full bg-white p-10 md:p-12 rounded-[3rem] shadow-2xl text-center border border-slate-100">
+
+        <div
+            class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-sm">
+            <span class="material-icons-round text-4xl">check_circle</span>
+        </div>
+
+        <h1 class="text-3xl font-black text-slate-900 mb-4 tracking-tight">Cadastro Realizado!</h1>
+        <p class="text-slate-500 mb-10 leading-relaxed">
+            Seu perfil profissional já foi enviado. Após a validação dos documentos, você estará visível para a
+            vizinhança.
+            <strong>Bem-vinda à rede de cuidado!</strong>
+        </p>
+
+        <div class="space-y-4">
+            <a href="/"
+                class="block w-full bg-dark-button text-white font-bold py-4 rounded-2xl hover:bg-primary transition-all shadow-lg active:scale-95">
+                Ir para a Home
+            </a>
+
+            <a href="/buscar" class="block w-full text-primary font-bold py-2 hover:underline transition-all">
+                Ver lista de profissionais
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>

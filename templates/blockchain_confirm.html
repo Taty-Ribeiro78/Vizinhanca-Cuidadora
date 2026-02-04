@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmar Blockchain | Vizinhança Cuidadora</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@400;600&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@400" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: "#0a7489", secondary: "#f26522", success: "#10b981" },
+                    fontFamily: { 'display': ['Montserrat', 'sans-serif'], 'sans': ['Inter', 'sans-serif'] }
+                }
+            }
+        };
+    </script>
+    <style>
+        .stellar-gradient {
+            background: linear-gradient(135deg, #4B0082 0%, #0a7489 50%, #f26522 100%);
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-slate-100 flex items-center justify-center min-h-screen p-4 font-sans">
+
+    <div class="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl overflow-hidden animate-fade-in">
+        <div class="stellar-gradient p-8 text-white text-center">
+            <span class="material-symbols-outlined text-4xl mb-2">account_balance_wallet</span>
+            <h1 class="font-display text-2xl font-bold mb-1">Resumo do Cuidado</h1>
+            <p class="text-sm opacity-90 font-medium">Pagamento via Blockchain Stellar</p>
+        </div>
+
+        <div class="p-8 space-y-6">
+            <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+                <div>
+                    <span
+                        class="text-slate-500 text-[10px] font-bold uppercase block tracking-wider">Profissional</span>
+                    <span class="font-bold text-slate-900">{{ nome }}</span>
+                </div>
+                <div class="text-right">
+                    <span class="text-slate-500 text-[10px] font-bold uppercase block tracking-wider">Serviço</span>
+                    <span class="font-bold text-primary">{{ especialidade }}</span>
+                </div>
+            </div>
+
+            <div class="space-y-3 bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                <div class="flex justify-between text-sm">
+                    <span class="text-slate-600 font-medium">Repasse Profissional (80%)</span>
+                    <span class="text-emerald-600 font-bold">R$ {{ "%.2f"|format(prof_val) }}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-slate-600 font-medium">Fundo Comunitário (15%)</span>
+                    <span class="text-primary font-bold">R$ {{ "%.2f"|format(assoc_val) }}</span>
+                </div>
+                <div class="pt-3 mt-3 border-t border-slate-200 flex justify-between items-center">
+                    <span class="font-bold text-slate-900">Total a Pagar</span>
+                    <span class="text-2xl font-black text-slate-900 tracking-tight">R$ {{ "%.2f"|format(total) }}</span>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 p-4 rounded-xl relative group">
+                <p class="text-[9px] text-teal-400 font-bold uppercase mb-2 tracking-widest">Endereço de Destino
+                    (Stellar)</p>
+                <div class="flex items-center gap-2">
+                    <code id="stellar-wallet"
+                        class="text-white text-[10px] break-all font-mono block bg-slate-800/50 p-2 rounded flex-1">
+                        {{ chave }}
+                    </code>
+                    <button onclick="copyToClipboard('stellar-wallet')"
+                        class="text-slate-400 hover:text-white transition-colors p-1">
+                        <span class="material-symbols-outlined text-lg">content_copy</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <button id="confirm-button" onclick="processPayment()"
+                    class="w-full bg-secondary hover:bg-orange-600 text-white font-bold py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 group active:scale-[0.98]">
+                    <span id="button-text">Confirmar na Blockchain</span>
+                    <span id="button-icon"
+                        class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </button>
+                <a href="javascript:history.back()"
+                    class="block text-center text-slate-400 hover:text-primary text-xs font-bold uppercase tracking-widest no-underline">
+                    Cancelar e Voltar
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="success-modal"
+        class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 hidden z-50 backdrop-blur-sm">
+        <div class="bg-white rounded-[2.5rem] p-8 max-w-sm w-full text-center shadow-2xl animate-fade-in">
+            <div
+                class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-emerald-50">
+                <span class="material-symbols-outlined text-4xl font-bold">check</span>
+            </div>
+            <h3 class="text-2xl font-bold text-slate-900 mb-2">Transação Aceita!</h3>
+            <p class="text-slate-600 mb-8 text-sm leading-relaxed">O pagamento foi processado e registrado com sucesso
+                no ledger da rede Stellar.</p>
+            <a href="/"
+                class="block w-full bg-primary text-white font-bold py-4 rounded-xl hover:bg-teal-800 transition-colors no-underline shadow-md">
+                Voltar ao Início
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(id) {
+            const text = document.getElementById(id).innerText;
+            navigator.clipboard.writeText(text);
+            const btn = event.currentTarget;
+            btn.classList.add('text-teal-400');
+            setTimeout(() => btn.classList.remove('text-teal-400'), 2000);
+        }
+
+        function processPayment() {
+            const btn = document.getElementById('confirm-button');
+            const txt = document.getElementById('button-text');
+            const icon = document.getElementById('button-icon');
+
+            btn.disabled = true;
+            btn.classList.add('opacity-70', 'cursor-not-allowed');
+            txt.innerText = "Registrando no Ledger...";
+            icon.innerText = "sync";
+            icon.classList.add('animate-spin');
+
+            // Simulação de tempo da Blockchain (Stellar fecha em 2-5 seg)
+            setTimeout(() => {
+                document.getElementById('success-modal').classList.remove('hidden');
+            }, 3000);
+        }
+    </script>
+</body>
+
+</html>
