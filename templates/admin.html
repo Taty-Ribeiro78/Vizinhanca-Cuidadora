@@ -12,9 +12,9 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: { 
-                        primary: "#0e6479", 
-                        secondary: "#ef711b", 
+                    colors: {
+                        primary: "#0e6479",
+                        secondary: "#ef711b",
                         "accent-teal": "#1ab1b8",
                         "dark-slate": "#0a5d71"
                     },
@@ -24,8 +24,17 @@
         }
     </script>
     <style>
-        .sidebar-active { background: #0e6479 !important; color: white !important; box-shadow: 0 10px 15px -3px rgba(14, 100, 121, 0.3); }
-        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5); }
+        .sidebar-active {
+            background: #0e6479 !important;
+            color: white !important;
+            box-shadow: 0 10px 15px -3px rgba(14, 100, 121, 0.3);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
     </style>
 </head>
 
@@ -44,42 +53,48 @@
 
         <nav class="flex-1 px-6 space-y-3">
             <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-4 mb-2">Menu Principal</p>
-            
-            <button onclick="switchTab('validacao')" id="btn-validacao" class="tab-btn sidebar-active w-full flex items-center gap-3 px-5 py-4 rounded-2xl font-extrabold transition-all">
+
+            <button onclick="switchTab('validacao')" id="btn-validacao"
+                class="tab-btn sidebar-active w-full flex items-center gap-3 px-5 py-4 rounded-2xl font-extrabold transition-all">
                 <span class="material-symbols-outlined">verified_user</span>
                 <span>Fila de Curadoria</span>
                 <span class="ml-auto bg-white/20 text-[10px] px-2 py-1 rounded-md">{{ profissionais|length }}</span>
             </button>
-            
-            <button onclick="switchTab('dashboard')" id="btn-dashboard" class="tab-btn w-full flex items-center gap-3 px-5 py-4 text-slate-500 hover:bg-slate-50 rounded-2xl transition-all font-bold">
+
+            <button onclick="switchTab('dashboard')" id="btn-dashboard"
+                class="tab-btn w-full flex items-center gap-3 px-5 py-4 text-slate-500 hover:bg-slate-50 rounded-2xl transition-all font-bold">
                 <span class="material-symbols-outlined">analytics</span>
                 <span>Painel de Operações</span>
             </button>
 
-            <a href="{{ url_for('admin_financas') }}" class="flex items-center gap-3 px-5 py-4 text-slate-500 hover:bg-slate-50 rounded-2xl transition-all font-bold">
+            <a href="{{ url_for('admin_financas') }}"
+                class="flex items-center gap-3 px-5 py-4 text-slate-500 hover:bg-slate-50 rounded-2xl transition-all font-bold">
                 <span class="material-symbols-outlined">payments</span>
                 <span>Financeiro</span>
             </a>
         </nav>
 
         <div class="p-8 border-t border-slate-50">
-            <a href="/" class="flex items-center gap-3 px-5 py-4 text-slate-400 hover:text-red-500 font-bold transition-colors">
+            <a href="/"
+                class="flex items-center gap-3 px-5 py-4 text-slate-400 hover:text-red-500 font-bold transition-colors">
                 <span class="material-symbols-outlined">logout</span> Sair
             </a>
         </div>
     </aside>
 
     <main class="ml-80 flex-1 p-16">
-        
+
         {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                <div class="mb-8 p-5 rounded-3xl border-2 flex items-center gap-4 animate-in slide-in-from-top duration-500 {% if category == 'success' %} bg-emerald-50 border-emerald-100 text-emerald-700 {% else %} bg-sky-50 border-sky-100 text-sky-700 {% endif %}">
-                    <span class="material-symbols-outlined">{% if category == 'success' %}check_circle{% else %}info{% endif %}</span>
-                    <p class="font-bold text-sm">{{ message }}</p>
-                </div>
-                {% endfor %}
-            {% endif %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div
+            class="mb-8 p-5 rounded-3xl border-2 flex items-center gap-4 animate-in slide-in-from-top duration-500 {% if category == 'success' %} bg-emerald-50 border-emerald-100 text-emerald-700 {% else %} bg-sky-50 border-sky-100 text-sky-700 {% endif %}">
+            <span class="material-symbols-outlined">{% if category == 'success' %}check_circle{% else %}info{% endif
+                %}</span>
+            <p class="font-bold text-sm">{{ message }}</p>
+        </div>
+        {% endfor %}
+        {% endif %}
         {% endwith %}
 
         <section id="tab-validacao" class="animate-in fade-in duration-700">
@@ -88,44 +103,45 @@
                     <span class="w-8 h-[2px] bg-secondary"></span> Gestão de Comunidade
                 </div>
                 <h2 class="text-5xl font-black text-primary tracking-tighter">Fila de Curadoria</h2>
-                <p class="text-slate-400 mt-3 text-lg font-medium">Novos profissionais aguardando entrada na rede segura.</p>
+                <p class="text-slate-400 mt-3 text-lg font-medium">Novos profissionais aguardando entrada na rede
+                    segura.</p>
             </header>
 
             <div class="grid gap-4 max-w-5xl">
-                {% if profissionais %}
-                    {% for pro in profissionais %}
-                    <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center justify-between">
-                        <div class="flex items-center gap-8">
-                            <div class="w-20 h-20 bg-primary/5 rounded-3xl flex items-center justify-center text-primary font-black text-2xl border-2 border-primary/10">
-                                {{ pro.nome[:2]|upper }}
-                            </div>
-                            <div>
-                                <h3 class="text-2xl font-black text-slate-800 tracking-tight">{{ pro.nome }}</h3>
-                                <div class="flex items-center gap-2 mt-1">
-                                    <span class="px-3 py-1 bg-accent-teal/10 text-accent-teal text-[10px] font-black uppercase rounded-full">{{ pro.especialidade }}</span>
-                                    <span class="text-slate-400 font-bold text-sm">• {{ pro.localidade }}</span>
-                                </div>
-                            </div>
+                {% if profissionais and profissionais|length > 0 %}
+                {% for pro in profissionais %}
+                <div
+                    class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center justify-between">
+                    <div class="flex items-center gap-8">
+                        <div
+                            class="w-20 h-20 bg-primary/5 rounded-3xl flex items-center justify-center text-primary font-black text-2xl border-2 border-primary/10">
+                            {{ pro.nome[:2]|upper }}
                         </div>
-                        
-                        <div class="flex items-center gap-4">
-                            {% if not pro.stellar_pubkey %}
-                            <a href="{{ url_for('criar_carteira', id=pro.id) }}" class="px-8 py-4 bg-secondary text-white rounded-2xl font-black shadow-lg shadow-secondary/20 hover:scale-105 transition-all text-sm flex items-center gap-2">
-                                <span class="material-symbols-outlined text-sm">key</span> Ativar Carteira
-                            </a>
-                            {% else %}
-                            <a href="{{ url_for('validar_profissional', id=pro.id) }}" class="px-8 py-4 bg-primary text-white rounded-2xl font-black shadow-lg shadow-primary/20 hover:scale-105 transition-all text-sm flex items-center gap-2">
-                                <span class="material-symbols-outlined text-sm">verified</span> Aprovar Profissional
-                            </a>
-                            {% endif %}
+                        <div>
+                            <h3 class="text-2xl font-black text-slate-800 tracking-tight">{{ pro.nome }}</h3>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span
+                                    class="px-3 py-1 bg-accent-teal/10 text-accent-teal text-[10px] font-black uppercase rounded-full">{{
+                                    pro.especialidade }}</span>
+                                <span class="text-slate-400 font-bold text-sm">• {{ pro.localidade }}</span>
+                            </div>
                         </div>
                     </div>
-                    {% endfor %}
+
+                    <div class="flex items-center gap-4">
+                        <a href="{{ url_for('validar_profissional', id=pro.id) }}"
+                            class="px-8 py-4 bg-primary text-white rounded-2xl font-black shadow-lg shadow-primary/20 hover:scale-105 transition-all text-sm flex items-center gap-2">
+                            <span class="material-symbols-outlined text-sm">verified</span>
+                            Aprovar Profissional
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
                 {% else %}
-                    <div class="p-20 text-center bg-white rounded-[3rem] border-4 border-dashed border-slate-100">
-                        <span class="material-symbols-outlined text-slate-200 text-6xl mb-4">task_alt</span>
-                        <p class="text-slate-400 font-black text-xl tracking-tight">Tudo em dia! Nenhum pendente.</p>
-                    </div>
+                <div class="p-20 text-center bg-white rounded-[3rem] border-4 border-dashed border-slate-100">
+                    <span class="material-symbols-outlined text-slate-200 text-6xl mb-4">task_alt</span>
+                    <p class="text-slate-400 font-black text-xl tracking-tight">Tudo em dia! Nenhum pendente.</p>
+                </div>
                 {% endif %}
             </div>
         </section>
@@ -147,18 +163,22 @@
                     </div>
                     <div class="p-4 space-y-2">
                         {% for agend in agendamentos %}
-                        <div class="p-6 flex items-center justify-between hover:bg-slate-50 rounded-[2rem] transition-colors group">
+                        <div
+                            class="p-6 flex items-center justify-between hover:bg-slate-50 rounded-[2rem] transition-colors group">
                             <div class="flex items-center gap-5">
-                                <div class="w-12 h-12 bg-slate-100 group-hover:bg-white rounded-2xl flex items-center justify-center text-primary font-black text-sm shadow-sm transition-colors">
+                                <div
+                                    class="w-12 h-12 bg-slate-100 group-hover:bg-white rounded-2xl flex items-center justify-center text-primary font-black text-sm shadow-sm transition-colors">
                                     {{ agend.iniciais }}
                                 </div>
                                 <div>
                                     <p class="font-black text-slate-800">{{ agend.paciente }}</p>
-                                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">{{ agend.endereco }}</p>
+                                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">{{
+                                        agend.endereco }}</p>
                                 </div>
                             </div>
                             <div class="text-right">
-                                <p class="text-sm font-black text-primary bg-primary/5 px-4 py-2 rounded-xl">{{ agend.horario }}</p>
+                                <p class="text-sm font-black text-primary bg-primary/5 px-4 py-2 rounded-xl">{{
+                                    agend.horario }}</p>
                             </div>
                         </div>
                         {% endfor %}
@@ -166,9 +186,11 @@
                 </div>
 
                 <div class="lg:col-span-5 space-y-6">
-                    <div class="bg-primary rounded-[3rem] p-10 text-white relative overflow-hidden shadow-2xl shadow-primary/20">
+                    <div
+                        class="bg-primary rounded-[3rem] p-10 text-white relative overflow-hidden shadow-2xl shadow-primary/20">
                         <div class="relative z-10">
-                            <span class="text-[10px] font-black uppercase tracking-[0.3em] text-accent-teal">Fundo de Saúde Comunitário</span>
+                            <span class="text-[10px] font-black uppercase tracking-[0.3em] text-accent-teal">Fundo de
+                                Saúde Comunitário</span>
                             <h4 class="text-5xl font-black mt-4 tracking-tighter">R$ 12.450,00</h4>
                             <div class="mt-8 flex items-center gap-2 text-emerald-300 font-bold text-sm">
                                 <span class="material-symbols-outlined text-sm">trending_up</span>
@@ -203,7 +225,7 @@
             // Esconde todas as seções
             document.getElementById('tab-validacao').classList.add('hidden');
             document.getElementById('tab-dashboard').classList.add('hidden');
-            
+
             // Estilos dos botões
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('sidebar-active');
@@ -212,7 +234,7 @@
 
             // Mostra a seção clicada
             document.getElementById('tab-' + tab).classList.remove('hidden');
-            
+
             // Ativa o botão correspondente
             const activeBtn = document.getElementById('btn-' + tab);
             activeBtn.classList.add('sidebar-active');
@@ -220,4 +242,5 @@
         }
     </script>
 </body>
+
 </html>
